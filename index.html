@@ -30,6 +30,7 @@
 				id="qcModel"
 				extends="minimal"
 				model="assets/testscene.babylon"
+				configuration="assets/viewerConfig.json"
 			></babylon>
 		</div>
 
@@ -102,8 +103,8 @@
 					var infoButton = new BABYLON.GUI.RadioButton()
 					var marker = scene.getMeshByName(infoLocID) // marker (Bl-Empty) set in scene
 					var markerLoc = invertXZ(marker.getAbsolutePosition()) // location of marker, fixed wrong orientation bug
-					infoButton.width = innerWidth / 40000
-					infoButton.height = innerWidth / 20000
+					infoButton.width = "30px"
+					infoButton.height = "30px"
 					infoButton.thickness = 2
 					infoButton.background = "#212121" //dark grey
 					infoButton.color = "white"
@@ -112,15 +113,15 @@
 
 					// Info Box Frame (rounded rectangle)
 					var infoBox = new BABYLON.GUI.Rectangle("infoBox")
-					infoBox.width = 0.5
-					infoBox.height = 0.4
+					infoBox.width = "350px"
+					//infoBox.height = "200px"
 					infoBox.adaptHeightToChildren = true
 					infoBox.cornerRadius = 10
 					infoBox.background = "#212121" //dark grey
 					infoBox.color = "white"
 					infoBox.alpha = 0.8
 					infoBox.isVisible = true
-					infoBox.paddingLeft = 120
+					infoBox.paddingLeft = "130px"
 					advancedTexture.addControl(infoBox)
 
 					//Info Box Text

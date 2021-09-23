@@ -1,0 +1,66 @@
+{
+    "templates": {
+        "main": {
+            "html": "defaultTemplate",
+            "params": {
+                "babylonFont": "babylonFont",
+                "noEscape": true
+            }
+        },
+        "fillContainer": {
+            "html": "fillContainer",
+            "params": {
+                "disable": false
+            }
+        },
+        "loadingScreen": {
+            "html": "loadingScreen",
+            "params": {
+                "backgroundColor": "#000000",
+                "loadingImage": "images.loading"
+            }
+        },
+        "viewer": {
+            "html": "defaultViewer",
+            "params": {
+                "enableDragAndDrop": false
+            }
+        },
+        "navBar": {
+            "html": "navbar",
+            "params": {
+                "speedList": {
+                    "0.5x": "0.5",
+                    "1.0x": "1.0",
+                    "1.5x": "1.5",
+                    "2.0x": "2.0"
+                },
+                "logoImage": "images.babylonLogo",
+                "logoText": "BabylonJS",
+                "logoLink": "https://babylonjs.com",
+                "hideHelp": true,
+                "hideHd": true,
+                "hideVr": true,
+                "disableOnFullscreen": false,
+                "text": {
+                    "hdButton": "Toggle HD",
+                    "fullscreenButton": "Fullscreen",
+                    "helpButton": "Help",
+                    "vrButton": "Toggle VR"
+                }
+            },
+            "events": {
+                "pointerdown": {
+                    ".navbar-control": true,
+                    ".help-button": true
+                },
+                "input": {
+                    ".progress-wrapper": true
+                },
+                "pointerup": {
+                    ".progress-wrapper": true
+                }
+            }
+        }
+    }
+}
