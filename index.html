@@ -29,7 +29,7 @@
 			<babylon
 				id="qcModel"
 				extends="minimal"
-				model="http://localhost:5500/Test/testscene.babylon"
+				model="http://localhost:5500/testscene.babylon"
 			></babylon>
 		</div>
 
@@ -126,7 +126,7 @@
 				var createInfoBox = function (infoLocID, infoText) {
 					var infoButton = new BABYLON.GUI.RadioButton()
 					var marker = scene.getMeshByName(infoLocID) // marker (Bl-Empty) set in scene
-					var loc = invertXZ(marker.getAbsolutePosition()) // location of marker, fixed wrong orientation bug
+					var markerLoc = invertXZ(marker.getAbsolutePosition()) // location of marker, fixed wrong orientation bug
 					infoButton.width = innerWidth / 40000
 					infoButton.height = innerWidth / 20000
 					infoButton.thickness = 2
@@ -137,7 +137,7 @@
 
 					// update InfoButton Location
 					scene.registerBeforeRender(function () {
-						infoButton.moveToVector3(loc, scene)
+						infoButton.moveToVector3(markerLoc, scene)
 					})
 					// make InfoButton bigger when hovered
 					infoButton.onPointerMoveObservable.add(function (state) {
@@ -158,36 +158,22 @@
 						infoTextBox.text = infoText
 						// camera Animation
 						// compute sight location (location marker + vector of rotation marker)
-						markerRotation = marker.rotation
-						markerRotation = invertXZ(markerRotation) // fix coordinate bug
-						markerVec = upVectorRotated(
-							markerRotation.x,
-							markerRotation.y,
-							markerRotation.z
-						)
+						markerRot = marker.rotation
+						markerRot = invertXZ(markerRot) // fix coordinate bug
+						markerDir = upVectorRotated(markerRot.x, markerRot.y, markerRot.z)
 						const distFac = 5.0 // distance camera is away from infoButton
-						markerVec = markerVec.multiplyByFloats(distFac, distFac, distFac)
-						sightLoc = loc.add(markerVec) // destination of camera in relation to infoButton
+						markerDir = markerDir.multiplyByFloats(distFac, distFac, distFac)
+						sightLoc = markerLoc.add(markerDir) // destination of camera in relation to infoButton
 
-						// var line = new BABYLON.GUI.Line()
-						// line.lineWidth = 4
-						// line.color = "Orange"
-						// line.y2 = 20
-						// line.linkOffsetY = -20
-						// advancedTexture.addControl(line)
-						// scene.registerBeforeRender(function () {
-						// 	line.moveToVector3(sightLoc, scene)
-						// })
-						// line.connectedControl = infoButton
-
-						console.log(loc)
-						console.log(sightLoc)
 						// add Animation to camera with lerp from current location to sight location
 						camera = scene.activeCamera
+						const animationFramerate = 30
+						const animationLength = 20
+
 						var cameraFly = new BABYLON.Animation(
 							"cameraFly",
 							"position",
-							30,
+							animationFramerate,
 							BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
 							BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
 						)
@@ -197,14 +183,33 @@
 								value: camera.position.clone(),
 							},
 							{
-								frame: 20,
+								frame: animationLength,
 								value: sightLoc,
 							},
 						]
 						cameraFly.setKeys(keys)
-						console.log({ camera })
-						camera.animations = [cameraFly]
+
+						var cameraTargetPan = new BABYLON.Animation(
+							"cameraTargetPan",
+							"target",
+							animationFramerate,
+							BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+							BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+						)
+						var keys = [
+							{
+								frame: 0,
+								value: camera.target,
+							},
+							{
+								frame: animationLength,
+								value: markerLoc,
+							},
+						]
+						cameraTargetPan.setKeys(keys)
+
 						// play animation
+						camera.animations = [cameraFly, cameraTargetPan]
 						scene.beginAnimation(camera, 0, 20)
 					})
 				}
