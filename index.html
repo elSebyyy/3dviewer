@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Model Viewer Test</title>
+		<!-- import Babylon.js, Babylon Viewer, Babylon GUI -->
+		<!-- <script src="https://cdn.babylonjs.com/babylon.js"></script> -->
+		<script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+		<script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
+		<!-- <script src="https://preview.babylonjs.com/gui/babylon.gui.js"></script> -->
+		<script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+		<style>
+			.babylon {
+				width: 80%;
+				margin: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Steuerung</h1>
+		<p>Linksklick: Drehen</p>
+		<p>Mausrad = Zoom</p>
+		<p>Strg + linksklick = Pan</p>
+
+		<!-- insert Babylon Model Viewer -->
+		<div class="babylon">
+			<babylon
+				id="qcModel"
+				extends="minimal"
+				model="http://localhost:5500/Test/testscene.babylon"
+			></babylon>
+		</div>
+
+		<!-- configurate Babylon Model Viewer -->
+		<script>
+			// get the scene of the Babylon Viewer
+			BabylonViewer.viewerManager
+				.getViewerPromiseById("qcModel")
+				.then(function (viewer) {
+					viewer.onSceneInitObservable.add(function (scene) {
+						scene.executeWhenReady(function (scene) {
+							// when the scene is ready add GUI
+							addGUI(scene)
+						})
+					})
+				})
+
+			// degree to Radians
+			function degreeToRadians(deg) {
+				return (deg * Math.PI) / 180
+			}
+
+			// cosinus by radians
+			function cos(rad) {
+				return Math.cos(rad).toFixed(4)
+			}
+
+			// sinus by radians
+			function sin(rad) {
+				return Math.sin(rad).toFixed(4)
+			}
+
+			// multiply x and z value of Vec3 by -1
+			function invertXZ(loc) {
+				var x = loc.x * -1
+				var y = loc.y
+				var z = loc.z * -1
+				return new BABYLON.Vector3(x, y, z)
+			}
+
+			// get (0,1,0) Vector rotated by (x,y,z)
+			function upVectorRotated(x, y, z) {
+				return new BABYLON.Vector3(
+					-1 * cos(y) * sin(z),
+					sin(x) * sin(y) * sin(z) + cos(x) * cos(z),
+					sin(y) * sin(z) * cos(x) + sin(x) * cos(z)
+				)
+			}
+
+			function addGUI(scene) {
+				// InfoButtons to add (LocID: InfoText)
+				const markers = {
+					Empty1:
+						"Test \nLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
+					Empty2: "safn  sajfas pjsafj sasa psaf ",
+					Empty3: "fsajo  pofsa  pfsa saf sa",
+					Empty4: "fsa  fsa sfafsa  sa  f asfsa fsa",
+				}
+
+				var advancedTexture =
+					BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI({
+						name: "UI",
+						scene: scene,
+					})
+				advancedTexture.renderAtIdealSize = true
+
+				var infoBox = new BABYLON.GUI.Rectangle("infoBox")
+				infoBox.width = 0.3
+				infoBox.height = 0.4
+				infoBox.adaptHeightToChildren = true
+				infoBox.cornerRadius = 10
+				infoBox.background = "#212121" //dark grey
+				infoBox.color = "white"
+				infoBox.alpha = 0.8
+				advancedTexture.addControl(infoBox)
+
+				var infoTextBox = new BABYLON.GUI.TextBlock("infoTextBox")
+				infoTextBox.textWrapping = true
+				infoTextBox.resizeToFit = true
+				const padding = 10
+				infoTextBox.paddingRight = padding
+				infoTextBox.paddingLeft = padding
+				infoTextBox.paddingTop = padding
+				infoTextBox.paddingBottom = padding
+				infoTextBox.textHorizontalAlignment =
+					BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
+				infoTextBox.fontFamily = "Helvetica"
+				infoTextBox.text = "infoText"
+				infoTextBox.color = "white"
+				infoTextBox.fontSize = "19px"
+				infoBox.addControl(infoTextBox)
+
+				// create RadioButtons which show information when clicked
+				var createInfoBox = function (infoLocID, infoText) {
+					var infoButton = new BABYLON.GUI.RadioButton()
+					var marker = scene.getMeshByName(infoLocID) // marker (Bl-Empty) set in scene
+					var loc = invertXZ(marker.getAbsolutePosition()) // location of marker, fixed wrong orientation bug
+					infoButton.width = innerWidth / 40000
+					infoButton.height = innerWidth / 20000
+					infoButton.thickness = 2
+					infoButton.background = "#212121" //dark grey
+					infoButton.color = "white"
+					infoButton.alpha = 0.5
+					advancedTexture.addControl(infoButton)
+
+					// update InfoButton Location
+					scene.registerBeforeRender(function () {
+						infoButton.moveToVector3(loc, scene)
+					})
+					// make InfoButton bigger when hovered
+					infoButton.onPointerMoveObservable.add(function (state) {
+						infoButton.scaleX = 1.2
+						infoButton.scaleY = 1.2
+					})
+					infoButton.onPointerOutObservable.add(function (state) {
+						infoButton.scaleX = 1
+						infoButton.scaleY = 1
+					})
+					var itEnded = function () {
+						// if anim is ended, set freelook to true, again.
+						//freelook = true;
+						console.log("animation ended - freelook set to true")
+					}
+					// when clicked zoom to location and show Info
+					infoButton.onPointerClickObservable.add(function (state) {
+						infoTextBox.text = infoText
+						// camera Animation
+						// compute sight location (location marker + vector of rotation marker)
+						markerRotation = marker.rotation
+						markerRotation = invertXZ(markerRotation) // fix coordinate bug
+						markerVec = upVectorRotated(
+							markerRotation.x,
+							markerRotation.y,
+							markerRotation.z
+						)
+						const distFac = 5.0 // distance camera is away from infoButton
+						markerVec = markerVec.multiplyByFloats(distFac, distFac, distFac)
+						sightLoc = loc.add(markerVec) // destination of camera in relation to infoButton
+
+						// var line = new BABYLON.GUI.Line()
+						// line.lineWidth = 4
+						// line.color = "Orange"
+						// line.y2 = 20
+						// line.linkOffsetY = -20
+						// advancedTexture.addControl(line)
+						// scene.registerBeforeRender(function () {
+						// 	line.moveToVector3(sightLoc, scene)
+						// })
+						// line.connectedControl = infoButton
+
+						console.log(loc)
+						console.log(sightLoc)
+						// add Animation to camera with lerp from current location to sight location
+						camera = scene.activeCamera
+						var cameraFly = new BABYLON.Animation(
+							"cameraFly",
+							"position",
+							30,
+							BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+							BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+						)
+						var keys = [
+							{
+								frame: 0,
+								value: camera.position.clone(),
+							},
+							{
+								frame: 20,
+								value: sightLoc,
+							},
+						]
+						cameraFly.setKeys(keys)
+						console.log({ camera })
+						camera.animations = [cameraFly]
+						// play animation
+						scene.beginAnimation(camera, 0, 20)
+					})
+				}
+
+				// add all InfoButtons
+				for (var key in markers) {
+					createInfoBox(key, markers[key])
+				}
+			}
+		</script>
+	</body>
+</html>
