@@ -7,16 +7,8 @@
 		<title>Model Viewer Test</title>
 		<!-- import Babylon.js, Babylon Viewer, Babylon GUI -->
 		<!-- <script src="https://cdn.babylonjs.com/babylon.js"></script> -->
-		<script src="https://cdn.babylonjs.com/babylon.max.js"></script>
-		<script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
+
 		<!-- <script src="https://preview.babylonjs.com/gui/babylon.gui.js"></script> -->
-		<script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-		<style>
-			.babylon {
-				width: 80%;
-				margin: auto;
-			}
-		</style>
 	</head>
 	<body>
 		<h1>Steuerung</h1>
@@ -24,211 +16,31 @@
 		<p>Mausrad = Zoom</p>
 		<p>Strg + linksklick = Pan</p>
 
+		<!-- import Babylon.js, Babylon Viewer, Babylon GUI -->
+		<script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+		<script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
+		<script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+		<!-- Adjust the Block -->
+		<style>
+			.babylon {
+				width: 80%;
+				margin: auto;
+			}
+		</style>
+
 		<!-- insert Babylon Model Viewer -->
 		<div class="babylon">
 			<babylon
 				id="qcModel"
 				extends="minimal"
-				model="assets/testscene.babylon"
+				model="assets/qc_v4.glb"
 				configuration="assets/viewerConfig.json"
 			></babylon>
 		</div>
-
-		<!-- configurate Babylon Model Viewer -->
-		<script>
-			// get the scene of the Babylon Viewer
-			BabylonViewer.viewerManager
-				.getViewerPromiseById("qcModel")
-				.then(function (viewer) {
-					viewer.onSceneInitObservable.add(function (scene) {
-						scene.executeWhenReady(function (scene) {
-							// when the scene is ready add GUI
-							addGUI(scene)
-						})
-					})
-				})
-
-			// degree to Radians
-			function degreeToRadians(deg) {
-				return (deg * Math.PI) / 180
-			}
-
-			// cosinus by radians
-			function cos(rad) {
-				return Math.cos(rad).toFixed(4)
-			}
-
-			// sinus by radians
-			function sin(rad) {
-				return Math.sin(rad).toFixed(4)
-			}
-
-			// multiply x and z value of Vec3 by -1
-			function invertXZ(loc) {
-				var x = loc.x * -1
-				var y = loc.y
-				var z = loc.z * -1
-				return new BABYLON.Vector3(x, y, z)
-			}
-
-			// get (0,1,0) Vector rotated by (x,y,z)
-			function upVectorRotated(x, y, z) {
-				return new BABYLON.Vector3(
-					-1 * cos(y) * sin(z),
-					sin(x) * sin(y) * sin(z) + cos(x) * cos(z),
-					sin(y) * sin(z) * cos(x) + sin(x) * cos(z)
-				)
-			}
-
-			function addGUI(scene) {
-				// InfoButtons to add (LocID: InfoText)
-				const markers = {
-					Empty1: "Test \nLorem ipsum dolor sit amet",
-					Empty2: "safn  sajfas pjsafj sasa psaf ",
-					Empty3: "fsajo  pofsa  pfsa saf sa",
-					Empty4: "fsa  fsa sfafsa  sa  f asfsa fsa",
-				}
-
-				var advancedTexture =
-					BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI({
-						name: "UI",
-						scene: scene,
-					})
-				advancedTexture.renderAtIdealSize = true
-
-				// create RadioButtons which show information when clicked
-				var createInfoBox = function (infoLocID, infoText) {
-					// Info Button (Circle)
-					var infoButton = new BABYLON.GUI.RadioButton()
-					var marker = scene.getMeshByName(infoLocID) // marker (Bl-Empty) set in scene
-					var markerLoc = invertXZ(marker.getAbsolutePosition()) // location of marker, fixed wrong orientation bug
-					infoButton.width = "30px"
-					infoButton.height = "30px"
-					infoButton.thickness = 2
-					infoButton.background = "#212121" //dark grey
-					infoButton.color = "white"
-					infoButton.alpha = 0.5
-					advancedTexture.addControl(infoButton)
-
-					// Info Box Frame (rounded rectangle)
-					var infoBox = new BABYLON.GUI.Rectangle("infoBox")
-					infoBox.width = "350px"
-					//infoBox.height = "200px"
-					infoBox.adaptHeightToChildren = true
-					infoBox.cornerRadius = 10
-					infoBox.background = "#212121" //dark grey
-					infoBox.color = "white"
-					infoBox.alpha = 0.8
-					infoBox.isVisible = true
-					infoBox.paddingLeft = "130px"
-					advancedTexture.addControl(infoBox)
-
-					//Info Box Text
-					var infoTextBox = new BABYLON.GUI.TextBlock("infoTextBox")
-					infoTextBox.textWrapping = true
-					infoTextBox.resizeToFit = true
-					const padding = 10
-					infoTextBox.paddingRight = padding
-					infoTextBox.paddingLeft = padding
-					infoTextBox.paddingTop = padding
-					infoTextBox.paddingBottom = padding
-					infoTextBox.textHorizontalAlignment =
-						BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT
-					infoTextBox.fontFamily = "Helvetica"
-					infoTextBox.text = infoText
-					infoTextBox.color = "white"
-					infoTextBox.fontSize = "19px"
-					infoBox.addControl(infoTextBox)
-
-					// update InfoButton Location
-					scene.registerBeforeRender(function () {
-						infoButton.moveToVector3(markerLoc, scene)
-						infoBox.moveToVector3(markerLoc, scene)
-					})
-					// make InfoButton bigger when hovered
-					infoButton.onPointerMoveObservable.add(function (state) {
-						infoButton.scaleX = 1.2
-						infoButton.scaleY = 1.2
-					})
-					infoButton.onPointerOutObservable.add(function (state) {
-						infoButton.scaleX = 1
-						infoButton.scaleY = 1
-					})
-					var itEnded = function () {
-						// if anim is ended, set freelook to true, again.
-						//freelook = true;
-						console.log("animation ended - freelook set to true")
-					}
-					// when clicked zoom to location and show Info
-					infoButton.onPointerClickObservable.add(function (state) {
-						infoBox.isVisible = true
-						// camera Animation
-						// compute sight location (location marker + vector of rotation marker)
-						markerRot = marker.rotation
-						markerRot = invertXZ(markerRot) // fix coordinate bug
-						markerDir = upVectorRotated(markerRot.x, markerRot.y, markerRot.z)
-						const distFac = 5.0 // distance camera is away from infoButton
-						markerDir = markerDir.multiplyByFloats(distFac, distFac, distFac)
-						sightLoc = markerLoc.add(markerDir) // destination of camera in relation to infoButton
-
-						// add Animation to camera with lerp from current location to sight location
-						camera = scene.activeCamera
-						const animationFramerate = 30
-						const animationLength = 20
-
-						var cameraFly = new BABYLON.Animation(
-							"cameraFly",
-							"position",
-							animationFramerate,
-							BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-							BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-						)
-						var keys = [
-							{
-								frame: 0,
-								value: camera.position.clone(),
-							},
-							{
-								frame: animationLength,
-								value: sightLoc,
-							},
-						]
-						cameraFly.setKeys(keys)
-
-						var cameraTargetPan = new BABYLON.Animation(
-							"cameraTargetPan",
-							"target",
-							animationFramerate,
-							BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-							BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-						)
-						var keys = [
-							{
-								frame: 0,
-								value: camera.target,
-							},
-							{
-								frame: animationLength,
-								value: markerLoc,
-							},
-						]
-						cameraTargetPan.setKeys(keys)
-
-						// play animation
-						camera.animations = [cameraFly, cameraTargetPan]
-						scene.beginAnimation(camera, 0, animationLength)
-					})
-				}
-				scene.onPointerObservable.add((pointerInfo) => {
-					if (pointerInfo.type == BABYLON.PointerEventTypes.POINTERDOWN) {
-					}
-				})
-
-				// add all InfoButtons
-				for (var key in markers) {
-					createInfoBox(key, markers[key])
-				}
-			}
-		</script>
 	</body>
+
+	<!-- configurate Babylon Model Viewer -->
+	<script src="environment.js"></script>
+	<script src="objectInteraction.js"></script>
 </html>
