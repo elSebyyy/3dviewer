@@ -60,6 +60,7 @@ function main(scene){
     infoTextBox.fontSize = "19px";
     infoBox.addControl(infoTextBox);
     
+    
     // text and object mappings
     const single_objects = ["qpu", "plaque"];
     const plates = {"plate_0" : "~50K (-223°C)", 
@@ -71,7 +72,11 @@ function main(scene){
     const control_circuit = ["cables_control", "filter_frequency"];
     const helium_system = ["gas_pipe", "still", "heat_exchanger_round", "heat_exchanger_steps", "mixing_chamber"];
     
-    
+    // update UI position
+    var boxPosition = BABYLON.Vector3.Zero();
+    scene.registerBeforeRender(function () {
+        infoBox.moveToVector3(boxPosition, scene)
+    });
 
     // create interactions for objects
     const sceneMeshes = scene.meshes
@@ -96,10 +101,13 @@ function main(scene){
 
         // click on object
         item.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function() {
-            infoBox.moveToVector3(item.position, scene)
+            boxPosition = item.getAbsolutePosition();
+            
             infoTextBox.text = item.name;
             infoBox.isVisible = true;
         }));
     });
+    
+    
     
 }
