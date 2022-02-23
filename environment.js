@@ -52,11 +52,11 @@ function addEnvTex(scene){
 	  });
 
 	// apply lightmap to material(s) (todo: lightmap intensity)
-	const lightmapMounting = new BABYLON.Texture("assets/lightmap.png", scene);
-	const materials = scene.materials;
-	let matMounting = materials.find(obj => {return obj.name === 'mounting'});
-	lightmapMounting.coordinatesIndex = 1;
-	matMounting.lightmapTexture = lightmapMounting;
+	// const lightmapMounting = new BABYLON.Texture("assets/lightmap.png", scene);
+	// const materials = scene.materials;
+	// let matMounting = materials.find(obj => {return obj.name === 'mounting'});
+	// lightmapMounting.coordinatesIndex = 1;
+	// matMounting.lightmapTexture = lightmapMounting;
 
 	// shadows
 	// scene.shadowsEnabled = true;

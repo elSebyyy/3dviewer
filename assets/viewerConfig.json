@@ -1,14 +1,13 @@
 {
-    
-    "scene": {
-        "debug": false
-    },
-    "camera": {
-        "behaviors": {
-            "autoRotate": 1
-        }
-    },
-    "engine": {
-        "antialiasing": true
-    }
+	"scene": {
+		"debug": false
+	},
+	"camera": {
+		"behaviors": {
+			"autoRotate": 1
+		}
+	},
+	"engine": {
+		"antialiasing": true
+	}
 }
