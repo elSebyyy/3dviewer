@@ -4,7 +4,7 @@
 	},
 	"plates": {
 		"parentText": "*Gold-plated copper disks* operating at different cryogenic temperatures. These disks form the framework of the setup:  all parts of the quantum computer are attached to these plates, and they are cooled to extremely low, or cryogenic temperatures by being in contact with the plates.",
-		"parentText": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation. They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
+		"parentTextDetails": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation. They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
 		"objects": {
 			"plate_0": {
 				"name": "~50K (-223°C)"
@@ -71,6 +71,7 @@
 	},
 	"helium_system": {
 		"parentText": "*Helium gas system* providing stable cryogenic temperatures.",
+		"parentTextDetails": "TODO",
 		"objects": {
 			"gas_pipe": {
 				"name": "Heluim gas pipe",
@@ -78,7 +79,8 @@
 			},
 			"still": {
 				"name": "still",
-				"text": "The still evaporates helium, mainly helium-3, a crucial step in the cooling process."
+				"text": "The still evaporates helium, mainly helium-3, a crucial step in the cooling process.",
+				"textDetails": "still"
 			},
 			"heat_exchanger_round": {
 				"name": "Continuous heat exchanger",
