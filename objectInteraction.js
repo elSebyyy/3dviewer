@@ -150,7 +150,7 @@ function main(scene){
                     nametagBox.isVisible = true;
                 }));
             }
-            else if(['helium_system', 'measuring_circuit', 'control_circuit'].includes(modeName)){
+            else if(['helium_system', 'electronic_circuit'].includes(modeName)){
                 item.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function() { 
                     advancedTexture.getDescendants(true).filter(i => i.name.startsWith('nametagBox')).forEach(i => i.isVisible = false); 
                     if(currentMode != modeName){
