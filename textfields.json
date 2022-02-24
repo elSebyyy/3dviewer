@@ -4,7 +4,7 @@
 	},
 	"plates": {
 		"parentText": "*Gold-plated copper disks* operating at different cryogenic temperatures",
-		"parentText": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation. They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
+		"parentTextDetails": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation. They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
 		"objects": {
 			"plate_0": {
 				"name": "~50K (-223°C)"
@@ -99,7 +99,7 @@
 			"plaque": {
 				"name": "Creaters / Developers / (Authors)",
 				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office).  S.D. developed the 3D animation, D.Z. provided the technical contents and supervised the project.  (Good or bad?  Input Team Science Office?)"
-			},
+			}
 		}
 	}
 }
