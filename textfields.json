@@ -1,9 +1,9 @@
 {
 	"default": {
-		"parentText": "*Model of superconducting quantum computer* \nQuantum computers (QC) promise to solve certain numerical problems significantly faster than classical computers. Different technological approaches are being pursued, though in all cases operating the actual QC-chip depends heavily on peripheral classical high-tech. \nThis model displays a typical superconducting QC setup within a dilution refrigerator, which provides stable operation conditions at cryogenic temperatures. This poses a great technological challenge for ultra-low power electronics operating at such low temperatures. \nForschungszentrum Jülich (FZJ) forms a national focus of QC research ranging from fundamental quantum science to hardware development to applications. The aim of FZJ is to establish a research, development and application ecosystem with academic and industrial partners."
+		"parentText": "**Model of superconducting quantum computer** \nQuantum computers promise to solve certain numerical problems significantly faster than classical computers. Different technological approaches are being pursued, though in all cases operating the quantum-chip depends crucially on peripheral classical high-tech. \nThis model displays a typical superconducting quantum computer setup within a dilution refrigerator, which provides stable operation conditions at cryogenic temperatures. This poses a great technological challenge for electronics operating at such low temperatures. \nForschungszentrum Jülich (FZJ) forms a national focus of QC research ranging from fundamental quantum science to hardware development to applications. The aim of FZJ is to establish a research, development and application ecosystem with academic and industrial partners."
 	},
 	"plates": {
-		"parentText": "*Gold-plated copper disks* operating at different cryogenic temperatures",
+		"parentText": "*Gold-plated copper disks* operating at different cryogenic temperatures. These disks form the framework of the setup:  all parts of the quantum computer are attached to these plates, and they are cooled to extremely low, or cryogenic temperatures by being in contact with the plates.",
 		"parentText": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation. They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
 		"objects": {
 			"plate_0": {
@@ -24,7 +24,7 @@
 		}
 	},
 	"electronic_circuit": {
-		"parentText": "*Electronic circuits* used for quantum information processing.",
+		"parentText": "*Electronic circuits* used for quantum information processing.  These circuits allow to process data by sending electronic signals as dictated by quantum computing programs written by the user.",
 		"parentTextDetails": "Quantum computations and readout are carried out by the application of microwaves, which are inserted via electronic circuits consisting of coaxial cables (some of which are made from superconducting material), different kind of microwave modules and power supply cables. The connection to the external world goes through the topmost disk. Specially designed circuit elements are required to work at cryogenic temperatures.\nCables are bent to prevent damage during thermal contraction or expansion, occuring each time the fridge is cooled down or warmed up. All cables are therefore either flexible or semi-rigid.",
 		"objects": {
 			"cables_control": {
@@ -100,6 +100,10 @@
 				"name": "Creaters / Developers / (Authors)",
 				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office).  S.D. developed the 3D animation, D.Z. provided the technical contents and supervised the project.  (Good or bad?  Input Team Science Office?)"
 			},
+			"credits": {
+				"name": "Credits",
+				"text": "We would like to thank the Peter Schüffelgen and Roudy Hanna of PGI-9 for letting us take a panorama picture of their laboratory for creating a background of the animation. We also thank Anna Bauer, Wolfgang Speier and Jan Timper for valuable discussions on how to present this animation. \nD.Z. is grateful for many stimulating discussions about the experimental setup of a superconducting quantum computer with many scientists at Forschungszentrum Jülich of PGI-9, PGI-11, PGI-13, most noteworthy with Pavel Bushev, Benedikt Frohn, Roudy Hanna, Albert Hertel, Markus Jerger, Andrea Raccanelli, Anne Schmidt and Frank Wilhelm-Mauch."
+			}
 		}
 	}
 }
