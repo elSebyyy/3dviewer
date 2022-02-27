@@ -1,6 +1,7 @@
 {
 	"default": {
-		"parentText": "**Model of superconducting quantum computer** \nQuantum computers promise to solve certain numerical problems significantly faster than classical computers. Different technological approaches are being pursued, though in all cases operating the quantum-chip depends crucially on peripheral classical high-tech. \nThis model displays a typical superconducting quantum computer setup within a dilution refrigerator, which provides stable operation conditions at cryogenic temperatures. This poses a great technological challenge for electronics operating at such low temperatures. \nForschungszentrum Jülich (FZJ) forms a national focus of QC research ranging from fundamental quantum science to hardware development to applications. The aim of FZJ is to establish a research, development and application ecosystem with academic and industrial partners."
+		"name": "Model of superconducting quantum computer",
+		"parentText": "Quantum computers are expected to solve certain numerical problems significantly faster than classical computers. Various technological approaches are being pursued in laboratories worldwide. In all cases operating the quantum processor depends crucially on peripheral classical high-tech. \nThe present model displays a typical superconducting quantum computer setup. The shown hardware is placed inside a dilution refrigerator, or cryostat, which provides stable operation conditions at cryogenic temperatures, though there are more special electronic devices outside the cryostat. This entire setup poses a great technological challenge: the integration of low temperature electronics, which protect the fickle quantum states on the quantum processor from external noise and enable high-fidelity quantum computing. \nForschungszentrum Jülich forms a national focus of quantum computing research ranging from fundamental quantum science to hardware development to applications. The aim of the Forschungszentrum is to establish a research, development and application ecosystem with academic and industrial partners."
 	},
 	"plates": {
 		"name": "Bulk of cryostat",
@@ -25,7 +26,8 @@
 		}
 	},
 	"electronic_circuit": {
-		"parentText": "*Electronic circuits* used for quantum information processing.  These circuits allow to process data by sending electronic signals as dictated by quantum computing programs written by the user.",
+		"name": "Electronic Circuits",
+		"parentText": "Electronic circuits used for processing of quantum information. These circuits allow to process data by sending electronic signals as dictated by quantum computing programs written by the user.",
 		"parentTextDetails": "Quantum computations and readout are carried out by the application of microwaves, which are inserted via electronic circuits consisting of coaxial cables (some of which are made from superconducting material), different kind of microwave modules and power supply cables. The connection to the external world goes through the topmost disk. Specially designed circuit elements are required to work at cryogenic temperatures.\nCables are bent to prevent damage during thermal contraction or expansion, occuring each time the fridge is cooled down or warmed up. All cables are therefore either flexible or semi-rigid.",
 		"objects": {
 			"cables_control": {
@@ -40,7 +42,7 @@
 			},
 			"qpu": {
 				"name": "QPU",
-				"text": "Quantum chip (or quantum processing unit, short QPU), hosting qubits, performs central quantum information processing tasks. In the present setup, the physical qubits and their couplers consist of superconducting circuits comprising mainly capacitors, resonators and so-called Josephson junctions.  Current circuits of this kind are mostly made of aluminum, a superconductor with a critical temperature of 1.75 Kelvin (or approximately -271 degrees Celsius)."
+				"text": "Quantum processor (or quantum processing unit, short QPU), hosting qubits, performs central quantum information processing tasks. In the present setup, the physical qubits and their couplers consist of superconducting circuits comprising mainly capacitors, resonators and so-called Josephson junctions. Current circuits of this kind are mostly made of aluminum, a superconductor with a critical temperature of 1.75 Kelvin (or approximately -271 degrees Celsius)."
 			},
 			"filter_frequency": {
 				"name": "Bandpass filters",
@@ -55,55 +57,57 @@
 				"text": "Similar to the TWPA, the HEMT (high electron mobility transistor) further amplifies readout signals. \nEach HEMT is connected to a DC power source (are there also AC sources?), also shown here."
 			},
 			"power_supply": {
-				"name": "Power supply cables",
+				"name": "Power supply Cables",
 				"text": "These cables provide DC power supply for the HEMTs."
 			},
 			"isolator": {
-				"name": "Microwave isolators",
+				"name": "Microwave Isolators",
 				"text": "Microwave isolators, or microwave circulators with one port terminated, prevent unwanted signals from disturbing the fragile quantum computations on the quantum processor, or QPU."
 			},
 			"directional_coupler": {
-				"name": "Directional coupler",
+				"name": "Directional Coupler",
 				"text": "Directional couplers, similar to frequency filters and bandpass isolators, further protect the QPU from unwanted external signals."
 			},
 			"open_cable": {
-				"name": "Open coaxial cable",
+				"name": "Open Coaxial Cable",
 				"text": "Open coaxial cable displaying internal conductor and dielectric"
 			}
 		}
 	},
 	"helium_system": {
-		"parentText": "*Helium gas system* providing stable cryogenic temperatures.",
-		"parentTextDetails": "TODO",
+		"name": "Helium Gas System",
+		"parentText": "Helium gas system providing stable cryogenic temperatures. The basic cooling process is based on evaporation of helium gas, and is similar to evaporative cooling using water (https://en.wikipedia.org/wiki/Evaporative_cooler).",
+		"parentTextDetails": "The continuous circular flow of a mixture of He-3 and He-4 enables stable cryogenic temperatures. An external gas system consisting of pumps, helium purifiers and gas condensers, precool the He-3 gas [e.g., using liquid nitrogen gas (at 77 K) and liquid He-4 (at 4.2 K)] before passing it into the gas pip inside the cryostat through the topmost disk.",
 		"objects": {
 			"gas_pipe": {
-				"name": "Heluim gas pipe",
-				"text": "The Helium gas pipe consists of internal (supply) and external (discharge) lines. The continuous circular flow of a mixture of He-3 and He-4 enables stable cryogenic temperatures. An external gas system consisting of pumps, helium purifiers and gas condensers, precool the He-3 gas [e.g., using liquid nitrogen gas (at 77 K) and liquid He-4 (at 4.2 K)] before passing it into the gas pip inside the cryostat through the topmost disk."
+				"name": "Helium Gas Pipe",
+				"text": "The Helium gas pipe consists of internal (supply) and external (discharge) lines. The internal line pumps highly concentrated helium gas into internal cooling cycle, while the outer line deducts warmer gas from the cryostat into the external helium system for recycling."
 			},
 			"still": {
-				"name": "still",
-				"text": "The still evaporates helium, mainly helium-3, a crucial step in the cooling process.",
-				"textDetails": "still"
+				"name": "Still",
+				"text": "The still evaporates helium, mainly helium-3, which is then deducted from the cryostat for reprocessing in the helium cycle.  This removal of He-3 a crucial step in the cooling process, since it balances the increase of He-3 that occurs in the mixing chamber.",
 			},
 			"heat_exchanger_round": {
-				"name": "Continuous heat exchanger",
-				"text": "The continuous helical heat exchanger helps cool down incoming warm helium gas. It consists of two concentric capillaries, and heat is exchanged via the interface. This type of heat exchanger does not provide enough surface area to reach extremely low temperatures."
+				"name": "Continuous Heat Exchanger",
+				"text": "The continuous helical heat exchanger helps cool down incoming warm helium gas.",
+				"textDetails": "It consists of two concentric capillaries, and heat is exchanged via the interface. This type of heat exchanger typically does not provide enough surface area to reach temperatures below 30 mK."
 			},
 			"heat_exchanger_steps": {
-				"name": "Step heat exchanger",
-				"text": "In each 'step' there are two metal tubes welded together.  The tubes are filled with sintered metal, which creates a very large surface area, which allows for reaching extremely low temperatures of less than 10 Millikelvin."
+				"name": "Step Heat Exchanger",
+				"text": "The step heat exchanger cools down incoming gas. It thus acts similarly to the continuous heat exchanger, however it is significantly more efficient.",
+				"textDetails": "In each 'step' there are two metal tubes carrying helium gas that have been welded together. The walls of these tubes are made from sintered metal thus providing a very large surface area, which is necessary for reaching extremely low temperatures of less than 10 Millikelvin."
 			},
 			"mixing_chamber": {
-				"name": "mixing chamber",
-				"text": "In the mixing chamber, cooling power is generated by mixing the concentrations of helium isotopes through evaporation."
+				"name": "Mixing Chamber",
+				"text": "In the mixing chamber, cooling power is generated by evaporating helium-3 into a helium-4 environment. This step is comparable to the cooling process in an evaporative cooler."
 			}
 		}
 	},
 	"single": {
 		"objects": {
 			"plaque": {
-				"name": "Creaters / Developers / (Authors)",
-				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office).  S.D. developed the 3D animation, D.Z. provided the technical contents and supervised the project.  (Good or bad?  Input Team Science Office?)"
+				"name": "Creaters / Developers / (Authors)?",
+				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office). S.D. developed the 3D animation, D.Z. provided the technical contents and supervised the project. Last changes:  2022. (Good or bad?  Input Team Science Office?)"
 			},
 			"credits": {
 				"name": "Credits",
