@@ -11,6 +11,14 @@ BabylonViewer.viewerManager
 	})
 
 function main(scene){
+    let getHTMLText = function(inst){
+        let htmlText = inst.text;
+        if (inst.hasOwnProperty('textDetails')){
+            htmlText += "<br><input type='checkbox' id='mycheckbox' /> <label for='mycheckbox' class='showmore'>Show more</label> <span class='moretext'>";
+            htmlText += inst.textDetails + "</span>";
+        }
+        return htmlText;
+    }
     // get camera
     let camera = scene.activeCamera;
     const defCameraLower = 0;
@@ -45,54 +53,84 @@ function main(scene){
 			name: "UI",
 			scene: scene,
 		});
-	advancedTexture.renderAtIdealSize = true;
+    let engine = scene.getEngine();
+    engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
     
-    // info box side 2D
-    // Info Box Frame (rounded rectangle)    
-    let sv = new BABYLON.GUI.ScrollViewer("scrollViewer");
-    sv.horizontalAlignment = 'right'
-    sv.verticalAlignment = 'top'
-    sv.width = "40%";
-    sv.height = "85%";
-    sv.left = "60%";
-    sv.paddingTop = "20px";
-    sv.paddingRight = "20px";
-    sv.adaptHeightToChildren = false;
-    sv.cornerRadius = 10;
-    sv.background = "#023d6b" // fzj, "#212121" dark grey
-    sv.color = "white";
-    sv.alpha = 0.8;
-    sv.thickness = 1;
+    let element = document.querySelector('viewer');
+    let infoBox = document.createElement('div');
+    infoBox.id = "infoBox";
+    let st = infoBox.style;
+    st.position = "absolute";
+    st.width = "35%";
+    st.top = "2%";
+    st.right = "2%";
+    st.background = "#023d6b"; // fzj
+    st.border = "1px solid white"
+    st.borderRadius = "10px";
+    st.opacity = "0.8";
+    st.maxWidth = "35%";
+    st.maxHeight = "75%";
+    st.display = "block";
+    st.alignSelf = "right";
+    
+    st.padding = "2%";
+    st.color = "white";
+    st.overflowY = "auto";
+    st.fontFamily = "Helvetica, Arial, sans-serif";
+    st.fontSize = "1.5vw"; 
+    st.wordBreak = "break-word";
+    st.textAlign =  "break-all";
+    
+    infoBox.innerHTML = getHTMLText(textfields.default);
+    element.appendChild(infoBox);
+    
+    let scrollStyle = `
+        #infoBox::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+        }
+        
+        #infoBox::-webkit-scrollbar-track {
+        border: 1px solid CornflowerBlue;
+        border-radius: 10px;
+        }
+        
+        #infoBox::-webkit-scrollbar-thumb {
+        background: CornflowerBlue;  
+        border-radius: 10px;
+        }
+        
+        #infoBox::-webkit-scrollbar-thumb:hover {
+        background: #93b3ed;  
+        }
 
-    sv.onPointerEnterObservable.add(function (){
-        camera.lowerRadiusLimit = camera.upperRadiusLimit = camera.radius;
-    });
-    sv.onPointerOutObservable.add(function (){
-        camera.lowerRadiusLimit = defCameraLower;
-        camera.upperRadiusLimit = defCameraUpper;
-    });
-    advancedTexture.addControl(sv);
+        a{
+        color: blue;
+        }
 
-    // info box text
-    let infoTextBox = new BABYLON.GUI.TextBlock("infoTextBox");
-    const paddingInfo = "20px";
-    infoTextBox.textWrapping = true;
-    infoTextBox.resizeToFit = true;
-    infoTextBox.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    infoTextBox.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-    infoTextBox.textHorizontalAlignment =
-    BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    infoTextBox.textVerticalAlignment =
-    BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-    infoTextBox.paddingRight = paddingInfo;
-    infoTextBox.paddingLeft = paddingInfo;
-    infoTextBox.paddingTop = paddingInfo;
-    infoTextBox.paddingBottom = paddingInfo;
-    infoTextBox.fontFamily = "Helvetica";
-    infoTextBox.text = textfields.default.parentText;
-    infoTextBox.color = "white";
-    infoTextBox.fontSize = "19px";
-    sv.addControl(infoTextBox);
+        #mycheckbox:checked ~ .moretext {
+        display: block;
+        }
+          
+        .moretext{
+        display: none;
+        }
+          
+        #mycheckbox{
+        display: none;
+        }
+
+        .showmore{
+        color : blue;
+        font-style : italic;
+        text-decoration: underline blue solid 2px; 
+        cursor: pointer;
+        }
+    `
+
+    let styleSheet = document.createElement("style");
+    styleSheet.innerText = scrollStyle;
+    document.head.appendChild(styleSheet);
     
     // add object interactions
     var currentMode = 'none'
@@ -120,25 +158,26 @@ function main(scene){
             nametagBox.background = "#023d6b" // fzj, "#212121" dark grey
             nametagBox.color = "white";
             nametagBox.alpha = 0.8;
-            nametagBox.paddingLeft = "130px";
+            nametagBox.linkOffsetX = "-100px";
             nametagBox.isVisible = false;
+            
             advancedTexture.addControl(nametagBox);
 
             // nametag Text
             let nametagTextBox = new BABYLON.GUI.TextBlock("nametagTextBox"+ "_" + objName);
-            const padding = 10;
+            const padding = "10px";
             nametagTextBox.textWrapping = false;
             nametagTextBox.resizeToFit = true;
+            
             nametagTextBox.paddingRight = padding;
             nametagTextBox.paddingLeft = padding;
             nametagTextBox.paddingTop = padding;
             nametagTextBox.paddingBottom = padding;
-            nametagTextBox.textHorizontalAlignment =
-            BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-            nametagTextBox.fontFamily = "Helvetica";
             nametagTextBox.text = objInfo.name;
             nametagTextBox.color = "white";
-            nametagTextBox.fontSize = "19px";
+            nametagTextBox.fontFamily = "Helvetica";
+            nametagTextBox.fontSize = "25";
+            
             nametagBox.addControl(nametagTextBox);
             nametagBox.linkWithMesh(objMesh);
 
@@ -180,7 +219,7 @@ function main(scene){
             objMesh.inspectableCustomProperties = {
                 select: function(){
                     clearSelection(false);
-                    infoTextBox.text = objInfo.text; // Obj Text
+                    infoBox.innerHTML = getHTMLText(objInfo); // Obj Text
                     nametagBox.isVisible = true; //show nametag
                     hl.addMesh(objMesh, BABYLON.Color3.Green()); // highlight
                     currentSelection = objMesh;
@@ -203,7 +242,7 @@ function main(scene){
 
     let selectMode = function(modeName, modeInfo){
         clearSelection(false);
-        infoTextBox.text = modeInfo.parentText; // Mode Text
+        infoBox.innerHTML = getHTMLText(modeInfo); // Mode Text
         nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
         scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, BABYLON.Color3.Green())); // highlight all
         currentSelection = modeName;
@@ -222,7 +261,7 @@ function main(scene){
                 hl.removeMesh(currentSelection);
             }
             if(toDefault){
-                infoTextBox.text = textfields.default.parentText; // default text
+                infoBox.innerHTML = getHTMLText(textfields.default); // default text
                 currentMode = 'none';
                 currentSelection = 'default';
             }
@@ -232,7 +271,7 @@ function main(scene){
 
     
     scene.onPointerObservable.add(function (pointerInfo) {
-        if(pointerInfo.pickInfo.pickedMesh.name == 'skyBox'){
+        if(pointerInfo.event.button == 0 && pointerInfo.pickInfo.pickedMesh.name == 'skyBox'){
             clearSelection(true);
         }
     },BABYLON.PointerEventTypes.POINTERTAP);
@@ -300,7 +339,7 @@ function main(scene){
                     return;
                 }
                 else{
-                    //console.warn("Obj doesn't exist");
+                    console.warn(seqTag);
                     continue;
                 }
             }
