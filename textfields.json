@@ -57,7 +57,7 @@
 				"seq": 6
 			},
 
-			"filter_frequency": {
+			"filter_bandpass": {
 				"name": "Bandpass filters",
 				"text": "High-pass and low-pass <strong>frequency filters</strong> protect the QPU from unwanted external high- and/or low-frequency noise.",
 				"seq": 7
@@ -134,13 +134,9 @@
 		"objects": {
 			"plaque": {
 				"name": "Developers",
-				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office). S.D. developed the 3D design, D.Z. provided the technical contents and supervised the project. Last changes: March 2022.",
+				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office). S.D. developed the digital 3D model and website, D.Z. provided the technical contents and supervised the project. Last changes: March 2022.",
+				"textDetails": "(We would like to thank Roudy Hanna, Peter Schüffelgen of PGI-9 for letting us take a panorama picture of their laboratory for creating a background of the animation.) We thank Anna Bauer, Wolfgang Speier and Jan Timper for valuable discussions on how to present this animation. D.Z. is grateful for many stimulating discussions about the experimental setup of a superconducting quantum computer with many scientists at Forschungszentrum Jülich of PGI-9, PGI-11, PGI-13, most noteworthy with Pavel Bushev, Benedikt Frohn, Roudy Hanna, Albert Hertel, Markus Jerger, Andrea Raccanelli, Anne Schmidt and Frank Wilhelm-Mauch.",
 				"seq": 20
-			},
-			"credits": {
-				"name": "Credits",
-				"text": "(We would like to thank Roudy Hanna, Peter Schüffelgen of PGI-9 for letting us take a panorama picture of their laboratory for creating a background of the animation.) We thank Anna Bauer, Wolfgang Speier and Jan Timper for valuable discussions on how to present this animation. \nD.Z. is grateful for many stimulating discussions about the experimental setup of a superconducting quantum computer with many scientists at Forschungszentrum Jülich of PGI-9, PGI-11, PGI-13, most noteworthy with Pavel Bushev, Benedikt Frohn, Roudy Hanna, Albert Hertel, Markus Jerger, Andrea Raccanelli, Anne Schmidt and Frank Wilhelm-Mauch.",
-				"seq": 21
 			}
 		}
 	}

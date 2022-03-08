@@ -1,0 +1,56 @@
+#infoBox {
+	text-indent: 1em;
+}
+
+#infoBox strong {
+	color: rgb(243, 23, 16);
+}
+
+#infoBox::-webkit-scrollbar {
+	width: 12px;
+	height: 12px;
+}
+
+#infoBox::-webkit-scrollbar-track {
+	border: 1px solid CornflowerBlue;
+	border-radius: 10px;
+}
+
+#infoBox::-webkit-scrollbar-thumb {
+	background: CornflowerBlue;
+	border-radius: 10px;
+}
+
+#infoBox::-webkit-scrollbar-thumb:hover {
+	background: #93b3ed;
+}
+
+a {
+	color: blue;
+}
+
+#showmoreCB:checked ~ .moretext {
+	display: block;
+}
+
+input[id="showmoreCB"]:checked + .showmore::before {
+	content: "Show less";
+}
+
+input[id="showmoreCB"]:not(:checked) + .showmore::before {
+	content: "Show more ";
+}
+
+.moretext {
+	display: none;
+}
+
+#showmoreCB {
+	display: none;
+}
+.showmore {
+	color: blue;
+	font-style: italic;
+	text-decoration: underline blue solid 2px;
+	cursor: pointer;
+}

@@ -7,7 +7,7 @@ BabylonViewer.viewerManager
 				addEnvTex(scene);
 			})
 		})
-	})
+	});
 
 function addEnvTex(scene){
 	// delete default light
@@ -38,6 +38,10 @@ function addEnvTex(scene){
 	camera.wheelPrecision = 300;
 	camera.panningSensibility = 7000;
 	camera.wheelDeltaPercentage = 0.05;
+	const defCameraLower = 0;
+    const defCameraUpper = 0.5;
+    camera.lowerRadiusLimit = defCameraLower;
+    camera.upperRadiusLimit = defCameraUpper;
 	// set camera collision
 	const collisionRadius = 0.02;
 	camera.collisionsEnabled = true;
@@ -49,7 +53,7 @@ function addEnvTex(scene){
 	sceneMeshes.forEach(function(item) {
 		//item.showBoundingBox = true;
 		item.checkCollisions = true;		
-	  });
+	});
 
 	// apply lightmap to material(s) (todo: lightmap intensity)
 	// const lightmapMounting = new BABYLON.Texture("assets/lightmap.png", scene);

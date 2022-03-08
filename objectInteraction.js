@@ -5,26 +5,23 @@ BabylonViewer.viewerManager
 		viewer.onSceneInitObservable.add(function (scene) {
 			scene.executeWhenReady(function (scene) {
 				// when the scene is ready add GUI
-				main(scene);
+				createObjInteractions(scene);
 			})
 		})
-	})
+	});
 
-function main(scene){
-    let getHTMLText = function(inst){
-        let htmlText = inst.text;
-        if (inst.hasOwnProperty('textDetails')){
-            htmlText += "<br><input type='checkbox' id='mycheckbox' /> <label for='mycheckbox' class='showmore'>Show more</label> <span class='moretext'>";
-            htmlText += inst.textDetails + "</span>";
-        }
-        return htmlText;
+const getHTMLText = function(inst){
+    let htmlText = inst.text;
+    if (inst.hasOwnProperty('textDetails')){
+        htmlText += "<br><input type='checkbox' id='showmoreCB' /> <label for='showmoreCB' class='showmore'></label> <span class='moretext'>";
+        htmlText += inst.textDetails + "</span>";
     }
+    return htmlText;
+}
+
+const createObjInteractions = function(scene){
     // get camera
     let camera = scene.activeCamera;
-    const defCameraLower = 0;
-    const defCameraUpper = 1;
-    camera.lowerRadiusLimit = defCameraLower;
-    camera.upperRadiusLimit = defCameraUpper;
 
     // read JSON file    
     let request = new XMLHttpRequest();
@@ -72,7 +69,6 @@ function main(scene){
     st.maxHeight = "75%";
     st.display = "block";
     st.alignSelf = "right";
-    
     st.padding = "2%";
     st.color = "white";
     st.overflowY = "auto";
@@ -83,54 +79,6 @@ function main(scene){
     
     infoBox.innerHTML = getHTMLText(textfields.default);
     element.appendChild(infoBox);
-    
-    let scrollStyle = `
-        #infoBox::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-        }
-        
-        #infoBox::-webkit-scrollbar-track {
-        border: 1px solid CornflowerBlue;
-        border-radius: 10px;
-        }
-        
-        #infoBox::-webkit-scrollbar-thumb {
-        background: CornflowerBlue;  
-        border-radius: 10px;
-        }
-        
-        #infoBox::-webkit-scrollbar-thumb:hover {
-        background: #93b3ed;  
-        }
-
-        a{
-        color: blue;
-        }
-
-        #mycheckbox:checked ~ .moretext {
-        display: block;
-        }
-          
-        .moretext{
-        display: none;
-        }
-          
-        #mycheckbox{
-        display: none;
-        }
-
-        .showmore{
-        color : blue;
-        font-style : italic;
-        text-decoration: underline blue solid 2px; 
-        cursor: pointer;
-        }
-    `
-
-    let styleSheet = document.createElement("style");
-    styleSheet.innerText = scrollStyle;
-    document.head.appendChild(styleSheet);
     
     // add object interactions
     var currentMode = 'none'
@@ -168,7 +116,6 @@ function main(scene){
             const padding = "10px";
             nametagTextBox.textWrapping = false;
             nametagTextBox.resizeToFit = true;
-            
             nametagTextBox.paddingRight = padding;
             nametagTextBox.paddingLeft = padding;
             nametagTextBox.paddingTop = padding;
@@ -176,7 +123,7 @@ function main(scene){
             nametagTextBox.text = objInfo.name;
             nametagTextBox.color = "white";
             nametagTextBox.fontFamily = "Helvetica";
-            nametagTextBox.fontSize = "25";
+            nametagTextBox.fontSize = "15em";
             
             nametagBox.addControl(nametagTextBox);
             nametagBox.linkWithMesh(objMesh);
@@ -189,30 +136,31 @@ function main(scene){
             }
             
             objMesh.actionManager = new BABYLON.ActionManager(scene);
-            
             // mouse over object
+            objMesh.overlayColor = new BABYLON.Color3.FromHexString("#023d6b") //new BABYLON.Color3(2, 61, 107);
+            objMesh.overlayAlpha = 0.5;
             if(['helium_system', 'electronic_circuit', 'plates'].includes(modeName)){
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
-                    if(currentMode == "none"){
-                        scene.getMeshesByTags(modeName, (mesh) => mesh.material = selMat);
+                    if(currentMode == "none"){      
+                        scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
                     }
                     else if(currentMode == modeName){
-                        objMesh.material = selMat;
+                        objMesh.renderOverlay = true;
                     }
                 }));
             
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
-                    scene.getMeshesByTags(modeName, (mesh) => mesh.material = scene.getMaterialByName('DefaultMaterial')); 
+                    scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = false);
                 }));
             }
             else if (modeName == 'single'){
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
                     if(currentMode == "none"){
-                        objMesh.material = selMat;
+                        objMesh.renderOverlay = true;
                     }
                 }));
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
-                    objMesh.material = scene.getMaterialByName('DefaultMaterial');
+                    objMesh.renderOverlay = false;
                 }));
             }
 
@@ -240,18 +188,9 @@ function main(scene){
         });
     });
 
-    let selectMode = function(modeName, modeInfo){
-        clearSelection(false);
-        infoBox.innerHTML = getHTMLText(modeInfo); // Mode Text
-        nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
-        scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, BABYLON.Color3.Green())); // highlight all
-        currentSelection = modeName;
-        currentMode = (modeName == 'plates')? "none" : modeName;
-    }
-
-    let clearSelection = function(toDefault) {
+    // functions for selecting, deselecting and forwarding
+    const clearSelection = function(toDefault) {
         if(currentSelection != 'default'){
-
             if((typeof currentSelection) == "string"){
                 nametags[currentSelection].forEach(i => i.isVisible = false); // hide all nametags
                 scene.getMeshesByTags(currentSelection, (mesh) => hl.removeMesh(mesh)); // hide all highlights
@@ -264,50 +203,20 @@ function main(scene){
                 infoBox.innerHTML = getHTMLText(textfields.default); // default text
                 currentMode = 'none';
                 currentSelection = 'default';
-            }
-            
+            }        
         }
     }
 
-    
-    scene.onPointerObservable.add(function (pointerInfo) {
-        if(pointerInfo.event.button == 0 && pointerInfo.pickInfo.pickedMesh.name == 'skyBox'){
-            clearSelection(true);
-        }
-    },BABYLON.PointerEventTypes.POINTERTAP);
- 
-    let buttonForward = BABYLON.GUI.Button.CreateImageOnlyButton(
-        "buttonForward",
-        "assets/forward2.png"
-    );
-    buttonForward.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
-    buttonForward.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    buttonForward.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-    buttonForward.width = "5%";
-    buttonForward.fixedRatio = 1;
-    buttonForward.left = "10%";
-    buttonForward.top = "-2%";
-    buttonForward.color = "transparent";
-    buttonForward.hoverCursor = "pointer";
-    advancedTexture.addControl(buttonForward);
+    const selectMode = function(modeName, modeInfo){
+        clearSelection(false);
+        infoBox.innerHTML = getHTMLText(modeInfo); // Mode Text
+        nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
+        scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, BABYLON.Color3.Green())); // highlight all
+        currentSelection = modeName;
+        currentMode = (modeName == 'plates')? "none" : modeName;
+    }
 
-    let buttonBackward = BABYLON.GUI.Button.CreateImageOnlyButton(
-        "buttonBackward",
-        "assets/forward2.png"
-    );
-    buttonBackward.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
-    buttonBackward.image.rotation = Math.PI;
-    buttonBackward.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    buttonBackward.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-    buttonBackward.width = "5%";
-    buttonBackward.fixedRatio = 1;
-    buttonBackward.left = "-10%";
-    buttonBackward.top = "-2%";
-    buttonBackward.color = "transparent";
-    buttonBackward.hoverCursor = "pointer";
-    advancedTexture.addControl(buttonBackward);
-
-    let forwardSelection = function (direction) {
+    const forwardSelection = function (direction) {
         // find current sequence number
         let seqTag = 0;
         if((typeof currentSelection) == "string"){
@@ -349,8 +258,48 @@ function main(scene){
             }
         }while(true);
     }
+    
+    // reset selection on click in void
+    scene.onPointerObservable.add(function (pointerInfo) {
+        if(pointerInfo.event.button == 0 && pointerInfo.pickInfo.pickedMesh.name == 'skyBox'){
+            clearSelection(true);
+        }
+    },BABYLON.PointerEventTypes.POINTERTAP);
+    
+    // add buttons
+    let buttonForward = BABYLON.GUI.Button.CreateImageOnlyButton(
+        "buttonForward",
+        "assets/forward.png"
+    );
+    buttonForward.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
+    buttonForward.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    buttonForward.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    buttonForward.width = "5%";
+    buttonForward.fixedRatio = 1;
+    buttonForward.left = "10%";
+    buttonForward.top = "-2%";
+    buttonForward.color = "transparent";
+    buttonForward.hoverCursor = "pointer";
+    advancedTexture.addControl(buttonForward);
 
+    let buttonBackward = BABYLON.GUI.Button.CreateImageOnlyButton(
+        "buttonBackward",
+        "assets/forward.png"
+    );
+    buttonBackward.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
+    buttonBackward.image.rotation = Math.PI;
+    buttonBackward.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    buttonBackward.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    buttonBackward.width = "5%";
+    buttonBackward.fixedRatio = 1;
+    buttonBackward.left = "-10%";
+    buttonBackward.top = "-2%";
+    buttonBackward.color = "transparent";
+    buttonBackward.hoverCursor = "pointer";
+    advancedTexture.addControl(buttonBackward);
+    
     buttonForward.onPointerClickObservable.add(() => forwardSelection(1));
-    buttonBackward.onPointerClickObservable.add(() => forwardSelection(-1));
+    buttonBackward.onPointerClickObservable.add(() => forwardSelection(-1));    
 
+    //scene.debugLayer.show();
 }
