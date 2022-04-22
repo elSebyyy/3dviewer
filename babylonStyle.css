@@ -1,9 +1,28 @@
 #infoBox {
 	text-indent: 1em;
+	position: absolute;
+	width: 35%;
+	top: 2%;
+	right: 2%;
+	background: #023d6b;
+	border: 1px solid white;
+	border-radius: 10px;
+	opacity: 0.8;
+	max-width: 35%;
+	max-height: 75%;
+	display: block;
+	align-self: right;
+	padding: 2%;
+	color: white;
+	overflow-y: auto;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 1.5vw;
+	word-break: break-word;
+	text-align: break-all;
 }
 
 #infoBox strong {
-	color: rgb(243, 23, 16);
+	font-weight: bold;
 }
 
 #infoBox::-webkit-scrollbar {
@@ -26,7 +45,7 @@
 }
 
 a {
-	color: blue;
+	color: #ffb13d;
 }
 
 #showmoreCB:checked ~ .moretext {
@@ -49,8 +68,8 @@ input[id="showmoreCB"]:not(:checked) + .showmore::before {
 	display: none;
 }
 .showmore {
-	color: blue;
+	color: #ffb13d;
 	font-style: italic;
-	text-decoration: underline blue solid 2px;
+	text-decoration: underline #ffb13d 2px;
 	cursor: pointer;
 }

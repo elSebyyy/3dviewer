@@ -5,17 +5,17 @@
 		<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Model Viewer Test</title>
-		<!-- import Babylon.js, Babylon Viewer, Babylon GUI -->
-		<!-- <script src="https://cdn.babylonjs.com/babylon.js"></script> -->
-
-		<!-- <script src="https://preview.babylonjs.com/gui/babylon.gui.js"></script> -->
-	</head>
+		<!-- 
+			https://cdn.babylonjs.com/babylon.js
+			https://preview.babylonjs.com/gui/babylon.gui.js
+			https://cdn.babylonjs.com/gui/babylon.gui.min.js
+			https://cdn.babylonjs.com/babylon.max.js
+		--></head>
 	<body>
 		<!-- import Babylon.js, Babylon Viewer, Babylon GUI -->
-		<script src="https://cdn.babylonjs.com/babylon.max.js"></script>
-		<script src="https://cdn.babylonjs.com/viewer/babylon.viewer.max.js"></script>
-		<script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-
+		<script src="node_modules\babylonjs\babylon.max.js"></script>
+		<script src="node_modules\babylonjs-viewer\babylon.viewer.js"></script>
+		<script src="node_modules\babylonjs-gui\babylon.gui.js"></script>
 		<!-- Adjust the Block -->
 		<style>
 			.babylon {
@@ -31,13 +31,24 @@
 			<babylon
 				id="qcModel"
 				extends="minimal"
-				model="assets/qc_v8.babylon"
+				model="assets/qc_v13.babylon"
 				configuration="assets/viewerConfig.json"
 			></babylon>
 		</div>
 
 		<!-- configurate Babylon Model Viewer -->
-		<!-- <script src="merge.js"></script> -->
+		<!-- <script src="merge.js"></script>
+		<script>
+			BabylonViewer.viewerManager
+				.getViewerPromiseById("qcModel")
+				.then(function (viewer) {
+					viewer.onSceneInitObservable.add(function (scene) {
+						scene.executeWhenReady(function (scene) {
+							scene.debugLayer.show()
+						})
+					})
+				})
+		</script> -->
 		<script src="environment.js"></script>
 		<script src="objectInteraction.js"></script>
 	</body>

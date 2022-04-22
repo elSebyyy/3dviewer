@@ -39,7 +39,7 @@ function main(scene){
     multimat.subMaterials.push(extra);
 
     let tNodes = scene.transformNodes;
-    tNodes.filter(i => i.getChildMeshes().size > 1)
+    tNodes = tNodes.filter(i => i.getChildMeshes().length > 1);
     tNodes.forEach(function (tNode) {
         let children = tNode.getChildMeshes();
         let tNodeName = tNode.name;
@@ -63,6 +63,37 @@ function main(scene){
             }
         }
     });
+
+    // set collisions of every object in the scene (todo: create collision boxes, debug bounding boxes)
+	const sceneMeshes = scene.meshes;
+	sceneMeshes.forEach(function(mesh) {
+		if (mesh.name.startsWith('coll_')) {
+			mesh.checkCollisions = true;
+			mesh.isPickable = false;
+			mesh.isVisible = false;
+		}
+		else{
+			mesh.checkCollisions = false;
+		}
+		//item.showBoundingBox = true;
+	});
+    let camera = scene.activeCamera;
+
+	camera.useBouncingBehavior = false;
+	camera.wheelPrecision = 300;
+	camera.panningSensibility = 1000;
+	camera.wheelDeltaPercentage = 0.05;
+	camera.radius = 3;
+	const defCameraLower = 0;
+    const defCameraUpper = 4;
+    camera.lowerRadiusLimit = defCameraLower;
+    camera.upperRadiusLimit = defCameraUpper;
+	camera.fov = 0.9;
+
+    const collisionRadius = 0.02;
+	camera.collisionsEnabled = true;
+	camera.checkCollisions = true;
+	camera.collisionRadius = new BABYLON.Vector3(collisionRadius, collisionRadius, collisionRadius);
 
     scene.debugLayer.show();
 

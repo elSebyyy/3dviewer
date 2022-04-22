@@ -1,3 +1,6 @@
+const colFZJ = "#023d6b"
+const colHighlight = BABYLON.Color3.Green();
+
 // get the scene of the Babylon Viewer
 BabylonViewer.viewerManager
 	.getViewerPromiseById("qcModel")
@@ -19,6 +22,21 @@ const getHTMLText = function(inst){
     return htmlText;
 }
 
+// multiply x and z value of Vec3 by -1
+const invertXZ = function(loc) {
+	return new BABYLON.Vector3(loc.x * -1, loc.y, loc.z * -1);
+}
+
+const coordsSwitchYZ = function(loc) {
+	return new BABYLON.Vector3(loc.x, loc.z, loc.y);
+}
+
+const strToVec = function(strVec){
+    const arrVec = strVec.split(",");
+    const vec = new BABYLON.Vector3(parseFloat(arrVec[0]), parseFloat(arrVec[1]), parseFloat(arrVec[2]));
+    return coordsSwitchYZ(vec);
+}
+
 const createObjInteractions = function(scene){
     // get camera
     let camera = scene.activeCamera;
@@ -28,6 +46,17 @@ const createObjInteractions = function(scene){
     request.open("GET", "textfields.json", false);
     request.send(null);
     let textfields = JSON.parse(request.responseText);
+    request = new XMLHttpRequest();
+    request.open("GET", "assets/nametagsPositions.json", false);
+    request.send(null);
+    let nametagPositions = JSON.parse(request.responseText);
+    console.log(nametagPositions);
+
+    // set camera to default position
+    if (nametagPositions.hasOwnProperty('camera_default') && nametagPositions.hasOwnProperty('cameraTarget_default')) {
+        camera.position = strToVec(nametagPositions['camera_default']);
+        camera.target = strToVec(nametagPositions['cameraTarget_default']);
+    }
 
     // create highlight layer/ outlines
     let hl = new BABYLON.HighlightLayer("hl1", scene);
@@ -39,11 +68,8 @@ const createObjInteractions = function(scene){
         hl.blurHorizontalSize = 0.5 + Math.cos(alpha) * 0.6 + 0.6;
         hl.blurVerticalSize = 0.5 + Math.sin(alpha /3) * 0.6 + 0.6;
     });
-
-    // create select material
-    let selMat = new BABYLON.StandardMaterial("selMat", scene);
-    selMat.emissiveColor = new BABYLON.Color3(1, 1, 0);
-
+    
+    //console.log(BABYLON.GUI);
     //create UI
     let advancedTexture =
 		BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI({
@@ -53,36 +79,106 @@ const createObjInteractions = function(scene){
     let engine = scene.getEngine();
     engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
     
-    let element = document.querySelector('viewer');
+    let canvasElement = document.querySelector('viewer');
     let infoBox = document.createElement('div');
     infoBox.id = "infoBox";
-    let st = infoBox.style;
-    st.position = "absolute";
-    st.width = "35%";
-    st.top = "2%";
-    st.right = "2%";
-    st.background = "#023d6b"; // fzj
-    st.border = "1px solid white"
-    st.borderRadius = "10px";
-    st.opacity = "0.8";
-    st.maxWidth = "35%";
-    st.maxHeight = "75%";
-    st.display = "block";
-    st.alignSelf = "right";
-    st.padding = "2%";
-    st.color = "white";
-    st.overflowY = "auto";
-    st.fontFamily = "Helvetica, Arial, sans-serif";
-    st.fontSize = "1.5vw"; 
-    st.wordBreak = "break-word";
-    st.textAlign =  "break-all";
     
     infoBox.innerHTML = getHTMLText(textfields.default);
-    element.appendChild(infoBox);
+    canvasElement.appendChild(infoBox);
+
+    const enterFullscreen = function(){	    
+        if(canvasElement.requestFullscreen){
+            canvasElement.requestFullscreen();
+        }
+        else if(canvasElement.mozRequestFullScreen){
+            canvasElement.mozRequestFullScreen();
+        }
+        else if(canvasElement.webkitRequestFullscreen){	
+            canvasElement.webkitRequestFullscreen();
+        }
+        else if(canvasElement.msRequestFullscreen){
+            canvasElement.msRequestFullscreen();
+        }
+    }
+    const quitFullscreen = function(){
+        if (document.exitFullscreen){
+          document.exitFullscreen();
+        }
+        else if (document.webkitExitFullscreen){
+          document.webkitExitFullscreen();
+        }
+        else if (document.msExitFullscreen){
+          document.msExitFullscreen();
+        }
+    }
+
+    // camera Animation
+    const cameraShot = function(id){
+        
+        // get camera destination position
+        let cameraDestPos;
+        let cameraTarPos;
+        const cameraDestPosLabel = ["camera", id].join("_");
+        const cameraTarPosLabel = ["cameraTarget", id].join("_");
+        if (nametagPositions.hasOwnProperty(cameraDestPosLabel) && nametagPositions.hasOwnProperty(cameraDestPosLabel)) {
+            cameraDestPos = strToVec(nametagPositions[cameraDestPosLabel]);
+            cameraTarPos = strToVec(nametagPositions[cameraTarPosLabel]);
+        } else {
+            return;
+        }
+
+        // add Animation to camera with lerp from current location to sight location
+        const animationFramerate = 30;
+        const animationLength = 20;
+
+        let cameraFly = new BABYLON.Animation(
+            "cameraFly",
+            "position",
+            animationFramerate,
+            BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+        );
+        let keys = [
+            {
+                frame: 0,
+                value: camera.position.clone(),
+            },
+            {
+                frame: animationLength,
+                value: cameraDestPos,
+            },
+        ];
+        cameraFly.setKeys(keys);
+
+        let cameraTargetPan = new BABYLON.Animation(
+            "cameraTargetPan",
+            "target",
+            animationFramerate,
+            BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+        );
+        keys = [
+            {
+                frame: 0,
+                value: camera.target,
+            },
+            {
+                frame: animationLength,
+                value: cameraTarPos,
+            },
+        ];
+        cameraTargetPan.setKeys(keys);
+
+        // play animation
+        camera.animations = [cameraFly, cameraTargetPan];
+        scene.beginAnimation(camera, 0, animationLength);
+    }
     
     // add object interactions
     var currentMode = 'none'
     var currentSelection = 'default'
+    var showUI = true;
+    var viewerLanguage = 'eng';
     let nametags = {};
     Object.keys(textfields).forEach(function(modeName){
         let modeInfo = textfields[modeName];
@@ -96,51 +192,64 @@ const createObjInteractions = function(scene){
             
             // add Tags
             BABYLON.Tags.AddTagsTo(objMesh, objInfo['seq'] + " " + modeName);
+
+            // get nametag position
+            let nametagPos;
+            const nametagPosLabel = ["name", objName].join("_");
+            if (nametagPositions.hasOwnProperty(nametagPosLabel)) {
+                const strPos = nametagPositions[nametagPosLabel];
+                nametagPos = strToVec(nametagPositions[nametagPosLabel]);
+            } 
+            else {
+                nametagPos = objMesh.position;
+            }
             
             // nametag 3D
             // nametag frame (rounded rectangle)
-            let nametagBox = new BABYLON.GUI.Rectangle("nametagBox" + "_" + objName);
-            nametagBox.adaptHeightToChildren = true;
-            nametagBox.adaptWidthToChildren = true;
-            nametagBox.cornerRadius = 10;
-            nametagBox.background = "#023d6b" // fzj, "#212121" dark grey
-            nametagBox.color = "white";
-            nametagBox.alpha = 0.8;
-            nametagBox.linkOffsetX = "-100px";
-            nametagBox.isVisible = false;
-            
-            advancedTexture.addControl(nametagBox);
+            let buttonNametag = new BABYLON.GUI.Button(["buttonNametag", objName].join("_"));
+            buttonNametag.height = "4%";
+            buttonNametag.adaptWidthToChildren = true;
+            buttonNametag.fontFamily = "Helvetica";
+            buttonNametag.cornerRadius = 10;
+            buttonNametag.background = colFZJ;
+            buttonNametag.color = "white";
+            buttonNametag.alpha = 0.8;
+            buttonNametag.isVisible = false;
+            advancedTexture.addControl(buttonNametag);
 
-            // nametag Text
-            let nametagTextBox = new BABYLON.GUI.TextBlock("nametagTextBox"+ "_" + objName);
-            const padding = "10px";
+            //nametag text
+            let nametagTextBox = new BABYLON.GUI.TextBlock(["nametagTextBox", objName].join("_"));
+            const padding = "5%";
             nametagTextBox.textWrapping = false;
             nametagTextBox.resizeToFit = true;
             nametagTextBox.paddingRight = padding;
             nametagTextBox.paddingLeft = padding;
-            nametagTextBox.paddingTop = padding;
-            nametagTextBox.paddingBottom = padding;
+            nametagTextBox.fontSize = "50%";
             nametagTextBox.text = objInfo.name;
             nametagTextBox.color = "white";
-            nametagTextBox.fontFamily = "Helvetica";
-            nametagTextBox.fontSize = "15em";
-            
-            nametagBox.addControl(nametagTextBox);
-            nametagBox.linkWithMesh(objMesh);
+            buttonNametag.addControl(nametagTextBox);
+
+            // update position
+            scene.registerBeforeRender(function () {
+                buttonNametag.moveToVector3(nametagPos, scene);
+            });
 
             // add nametags to map for better search
             if (nametags.hasOwnProperty(modeName)) {
-                nametags[modeName].push(nametagBox);       
+                nametags[modeName].push(buttonNametag);       
             } else {
-                nametags[modeName] = [nametagBox];
+                nametags[modeName] = [buttonNametag];
             }
             
             objMesh.actionManager = new BABYLON.ActionManager(scene);
             // mouse over object
-            objMesh.overlayColor = new BABYLON.Color3.FromHexString("#023d6b") //new BABYLON.Color3(2, 61, 107);
+            objMesh.overlayColor = new BABYLON.Color3.FromHexString(colFZJ)
             objMesh.overlayAlpha = 0.5;
             if(['helium_system', 'electronic_circuit', 'plates'].includes(modeName)){
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
+                    if(! showUI){
+                        return;
+                    }
                     if(currentMode == "none"){      
                         scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
                     }
@@ -155,6 +264,9 @@ const createObjInteractions = function(scene){
             }
             else if (modeName == 'single'){
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
+                    if(! showUI){
+                        return;
+                    }
                     if(currentMode == "none"){
                         objMesh.renderOverlay = true;
                     }
@@ -168,23 +280,40 @@ const createObjInteractions = function(scene){
                 select: function(){
                     clearSelection(false);
                     infoBox.innerHTML = getHTMLText(objInfo); // Obj Text
-                    nametagBox.isVisible = true; //show nametag
-                    hl.addMesh(objMesh, BABYLON.Color3.Green()); // highlight
+                    buttonNametag.isVisible = true; //show nametag
+                    hl.addMesh(objMesh, colHighlight); // highlight
+                    cameraShot(objName);
                     currentSelection = objMesh;
                     currentMode = modeName == 'single' ? 'none' : modeName;
                 }
             };
 
-            if(['helium_system', 'electronic_circuit', 'plates', 'single'].includes(modeName)){
-                objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function() { 
-                    if(currentMode == "none" && modeName != 'single'){
-                        selectMode(modeName, modeInfo);
+            const clickObjectAction = function(){
+                if(! showUI){
+                    return;
+                }
+                if(currentMode == 'none' && modeName != 'single'){
+                    selectMode(modeName, modeInfo);
+                }
+                else if(currentMode == modeName || (currentMode == 'none' && modeName == 'single')){
+                    if(currentSelection == objMesh){
+                        clearSelection(true);
                     }
-                    else if(currentMode == modeName || (currentMode == "none" && modeName == 'single')){
+                    else{
                         objMesh.inspectableCustomProperties.select();
                     }
+                }
+            }
+
+            if(['helium_system', 'electronic_circuit', 'plates', 'single'].includes(modeName)){
+                objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, function() { 
+                    clickObjectAction();
                 }));
-            }            
+            }
+
+            buttonNametag.onPointerClickObservable.add(function(){
+                clickObjectAction();
+            });
         });
     });
 
@@ -196,13 +325,14 @@ const createObjInteractions = function(scene){
                 scene.getMeshesByTags(currentSelection, (mesh) => hl.removeMesh(mesh)); // hide all highlights
             }
             else{
-                advancedTexture.getDescendants(true).filter(i => i.linkedMesh == currentSelection).forEach(i => i.isVisible = false); 
+                advancedTexture.getDescendants(true).filter(i => i.name == "buttonNametag" + "_" + currentSelection.name).forEach(i => i.isVisible = false); 
                 hl.removeMesh(currentSelection);
             }
             if(toDefault){
                 infoBox.innerHTML = getHTMLText(textfields.default); // default text
                 currentMode = 'none';
                 currentSelection = 'default';
+                cameraShot('default');
             }        
         }
     }
@@ -211,7 +341,8 @@ const createObjInteractions = function(scene){
         clearSelection(false);
         infoBox.innerHTML = getHTMLText(modeInfo); // Mode Text
         nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
-        scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, BABYLON.Color3.Green())); // highlight all
+        scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, colHighlight)); // highlight all
+        cameraShot(modeName);
         currentSelection = modeName;
         currentMode = (modeName == 'plates')? "none" : modeName;
     }
@@ -261,6 +392,9 @@ const createObjInteractions = function(scene){
     
     // reset selection on click in void
     scene.onPointerObservable.add(function (pointerInfo) {
+        if(! showUI){
+            return;
+        }
         if(pointerInfo.event.button == 0 && pointerInfo.pickInfo.pickedMesh.name == 'skyBox'){
             clearSelection(true);
         }
@@ -269,7 +403,7 @@ const createObjInteractions = function(scene){
     // add buttons
     let buttonForward = BABYLON.GUI.Button.CreateImageOnlyButton(
         "buttonForward",
-        "assets/forward.png"
+        "assets/buttons/forward.png"
     );
     buttonForward.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
     buttonForward.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -284,7 +418,7 @@ const createObjInteractions = function(scene){
 
     let buttonBackward = BABYLON.GUI.Button.CreateImageOnlyButton(
         "buttonBackward",
-        "assets/forward.png"
+        "assets/buttons/forward.png"
     );
     buttonBackward.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
     buttonBackward.image.rotation = Math.PI;
@@ -297,9 +431,109 @@ const createObjInteractions = function(scene){
     buttonBackward.color = "transparent";
     buttonBackward.hoverCursor = "pointer";
     advancedTexture.addControl(buttonBackward);
-    
-    buttonForward.onPointerClickObservable.add(() => forwardSelection(1));
-    buttonBackward.onPointerClickObservable.add(() => forwardSelection(-1));    
 
-    //scene.debugLayer.show();
+    let buttonFullscreen = BABYLON.GUI.Button.CreateImageOnlyButton(
+        "buttonFullscreen",
+        "assets/buttons/fullscreen.png"
+    );
+    buttonFullscreen.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
+    buttonFullscreen.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    buttonFullscreen.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    buttonFullscreen.width = "5%";
+    buttonFullscreen.fixedRatio = 1;
+    buttonFullscreen.left = "-2%";
+    buttonFullscreen.top = "-2%";
+    buttonFullscreen.color = "transparent";
+    buttonFullscreen.hoverCursor = "pointer";
+    advancedTexture.addControl(buttonFullscreen);
+
+    let buttonHideUI = BABYLON.GUI.Button.CreateImageOnlyButton(
+        "buttonHideUI",
+        "assets/buttons/hideUI.png"
+    );
+    buttonHideUI.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
+    buttonHideUI.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    buttonHideUI.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    buttonHideUI.width = "5%";
+    buttonHideUI.fixedRatio = 1;
+    buttonHideUI.left = "2%";
+    buttonHideUI.top = "-2%";
+    buttonHideUI.color = "transparent";
+    buttonHideUI.hoverCursor = "pointer";
+    advancedTexture.addControl(buttonHideUI);
+
+    let buttonChangeLang = BABYLON.GUI.Button.CreateImageOnlyButton(
+        "buttonChangeLang",
+        "assets/buttons/language_eng.png"
+    );
+    buttonChangeLang.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
+    buttonChangeLang.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    buttonChangeLang.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    buttonChangeLang.width = "5%";
+    buttonChangeLang.fixedRatio = 1;
+    buttonChangeLang.left = "2%";
+    buttonChangeLang.top = "2%";
+    buttonChangeLang.color = "transparent";
+    buttonChangeLang.hoverCursor = "pointer";
+    advancedTexture.addControl(buttonChangeLang);
+    
+    // add functions to buttons
+    buttonForward.onPointerClickObservable.add(() => forwardSelection(1));
+    buttonBackward.onPointerClickObservable.add(() => forwardSelection(-1));
+    buttonFullscreen.onPointerClickObservable.add(function(){
+        if(document.fullscreenElement != null){
+            quitFullscreen();
+        }
+        else{
+            enterFullscreen();
+        }
+    });
+
+    let nametagsVis = [];
+    const buttonsDisable = [buttonForward, buttonBackward, buttonFullscreen, buttonChangeLang];
+    buttonHideUI.onPointerClickObservable.add(function(){
+        if(showUI){
+            nametagsVis = advancedTexture.getDescendants().filter(con => con.name.startsWith("buttonNametag_") && con.isVisible == true);
+            nametagsVis.forEach(con => con.isVisible = false);
+            hl.isEnabled = false;
+            buttonsDisable.forEach(function(button){
+                button.isEnabled = false;
+                button.isVisible = false;
+            })
+            infoBox.style.display = 'none';
+            showUI = false;
+        }
+        else{
+            nametagsVis.forEach(con => con.isVisible = true);
+            advancedTexture.getChildren().forEach(con => con.isVisible = true);
+            hl.isEnabled = true;
+            buttonsDisable.forEach(function(button){
+                button.isEnabled = true;
+                button.isVisible = true;
+            })
+            infoBox.style.display = 'initial';
+            showUI = true;
+        }
+    });
+
+    buttonChangeLang.onPointerClickObservable.add(function(){
+        if(viewerLanguage == 'eng'){
+            buttonChangeLang.children[0].source = "assets/buttons/language_ger.png";
+            viewerLanguage = 'ger';
+        }
+        else{
+            buttonChangeLang.children[0].source = "assets/buttons/language_eng.png";
+            viewerLanguage = 'eng';
+        }
+    });
+        
+    // make buttons bigger when hovered
+    const buttons = [buttonForward, buttonBackward, buttonFullscreen, buttonHideUI, buttonChangeLang];
+    buttons.forEach(button => button.onPointerMoveObservable.add(() => {button.scaleX = 1.1, button.scaleY = 1.1}));
+    buttons.forEach(button => button.onPointerOutObservable.add(() => {button.scaleX = 1, button.scaleY = 1}));
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+
+    // scene.debugLayer.show();
 }
