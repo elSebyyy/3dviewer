@@ -1,0 +1,25 @@
+{
+	"name": "3dviewer",
+	"version": "1.0.0",
+	"description": "3D-viewer for qc-model (FZJ)",
+	"main": "index.js",
+	"dependencies": {
+		"babylonjs": "^4.2.1",
+		"babylonjs-gui": "^4.2.1",
+		"babylonjs-viewer": "^4.2.1"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/elSebyyy/3dviewer.git"
+	},
+	"author": "Sebastian Droege, Daniel Zeuch",
+	"license": "CC-BY-ND-4.0",
+	"bugs": {
+		"url": "https://github.com/elSebyyy/3dviewer/issues"
+	},
+	"homepage": "https://github.com/elSebyyy/3dviewer#readme"
+}
