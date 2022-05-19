@@ -41,7 +41,7 @@ function addEnvTex(scene){
 	camera.panningSensibility = 500;
 	camera.panningInertia = 0.9;
 	camera.wheelDeltaPercentage = 0.05;
-	camera.radius = 3;
+	camera.upperRadiusLimit = 5.0;
 	//camera.fov = 0.9;
 
 	// set camera collision

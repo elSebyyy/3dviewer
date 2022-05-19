@@ -12,6 +12,16 @@
 			https://cdn.babylonjs.com/babylon.max.js
 		--></head>
 	<body>
+		<script>
+			document.addEventListener("keyup", function (e) {
+				var keyCode = e.keyCode ? e.keyCode : e.which
+				if (keyCode == 44) {
+					window.alert(
+						"Don't share Screenshots without mentioning Forschungszentrum Jülich Gmbh"
+					)
+				}
+			})
+		</script>
 		<!-- import Babylon.js, Babylon Viewer, Babylon GUI -->
 		<script src="node_modules\babylonjs\babylon.max.js"></script>
 		<script src="node_modules\babylonjs-viewer\babylon.viewer.js"></script>
@@ -22,10 +32,30 @@
 				width: 80%;
 				margin: auto;
 			}
+			footer {
+				text-align: center;
+				padding: 5px;
+				color: gray;
+			}
+			@media print {
+				html,
+				body {
+					display: none;
+				}
+			}
 		</style>
 
 		<link rel="stylesheet" href="babylonStyle.css" />
 
+		<script>
+			if (
+				!window.confirm(
+					'This website is licensed under CC-BY-NC-ND-4.0. Sharing images of this website is only allowed if "Forschungszentrum Jülich Gmbh" and the license identifier is mentioned.'
+				)
+			) {
+				window.close()
+			}
+		</script>
 		<!-- insert Babylon Model Viewer -->
 		<div class="babylon">
 			<babylon
@@ -51,5 +81,9 @@
 		</script> -->
 		<script src="environment.js"></script>
 		<script src="objectInteraction.js"></script>
+
+		<footer>
+			<p>CC-BY-NC-ND-4.0 Forschungszentrum Jülich Gmbh</p>
+		</footer>
 	</body>
 </html>
