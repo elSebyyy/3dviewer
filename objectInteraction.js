@@ -50,13 +50,6 @@ const createObjInteractions = function(scene){
     request.open("GET", "assets/nametagsPositions.json", false);
     request.send(null);
     let nametagPositions = JSON.parse(request.responseText);
-    console.log(nametagPositions);
-
-    // set camera to default position
-    if (nametagPositions.hasOwnProperty('camera_default') && nametagPositions.hasOwnProperty('cameraTarget_default')) {
-        camera.position = strToVec(nametagPositions['camera_default']);
-        camera.target = strToVec(nametagPositions['cameraTarget_default']);
-    }
 
     // create highlight layer/ outlines
     let hl = new BABYLON.HighlightLayer("hl1", scene);
@@ -69,7 +62,6 @@ const createObjInteractions = function(scene){
         hl.blurVerticalSize = 0.5 + Math.sin(alpha /3) * 0.6 + 0.6;
     });
     
-    //console.log(BABYLON.GUI);
     //create UI
     let advancedTexture =
 		BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI({
@@ -86,7 +78,8 @@ const createObjInteractions = function(scene){
     infoBox.innerHTML = getHTMLText(textfields.default);
     canvasElement.appendChild(infoBox);
 
-    const enterFullscreen = function(){	    
+    // fullscreen toggles
+    const enterFullscreen = function(){	  
         if(canvasElement.requestFullscreen){
             canvasElement.requestFullscreen();
         }
@@ -389,7 +382,7 @@ const createObjInteractions = function(scene){
             }
         }while(true);
     }
-    
+
     // reset selection on click in void
     scene.onPointerObservable.add(function (pointerInfo) {
         if(! showUI){
@@ -398,7 +391,7 @@ const createObjInteractions = function(scene){
         if(pointerInfo.event.button == 0 && pointerInfo.pickInfo.pickedMesh.name == 'skyBox'){
             clearSelection(true);
         }
-    },BABYLON.PointerEventTypes.POINTERTAP);
+    },BABYLON.PointerEventTypes.POINTERDOUBLETAP);
     
     // add buttons
     let buttonForward = BABYLON.GUI.Button.CreateImageOnlyButton(
@@ -535,5 +528,9 @@ const createObjInteractions = function(scene){
         engine.resize();
     });
 
+    // set camera to default position
+    if (nametagPositions.hasOwnProperty('camera_default') && nametagPositions.hasOwnProperty('cameraTarget_default')) {
+        cameraShot('default');
+    }
     // scene.debugLayer.show();
 }
