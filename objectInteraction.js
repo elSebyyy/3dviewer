@@ -43,11 +43,11 @@ const createObjInteractions = function(scene){
 
     // read JSON file    
     let request = new XMLHttpRequest();
-    request.open("GET", "textfields.json", false);
+    request.open("GET", "assets/configs/textfields.json", false);
     request.send(null);
     let textfields = JSON.parse(request.responseText);
     request = new XMLHttpRequest();
-    request.open("GET", "assets/nametagsPositions.json", false);
+    request.open("GET", "assets/configs/nametagsPositions.json", false);
     request.send(null);
     let nametagPositions = JSON.parse(request.responseText);
 

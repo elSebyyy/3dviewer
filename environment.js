@@ -14,8 +14,10 @@ function addEnvTex(scene){
 	scene.lights[0].dispose();
 	
 	// set HDR texture
-	const reflectionTexture = new BABYLON.HDRCubeTexture("assets/environment/testmap.hdr", scene, 1024, false, true, false, true);
-	const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("assets/environment.env", scene);
+	const reflectionTexture = new BABYLON.HDRCubeTexture("assets/environment/raum2_v4.hdr", scene, 512, false, true, false, true);
+	//const reflectionTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("assets/environment/raum2_v5.env", scene);
+	
+	const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("assets/environment/environment.env", scene);
 	scene.environmentTexture = hdrTexture;
 	
 	// create skybox (abkürzen mit DefaultSkybox ?, 4. Parameter)
@@ -65,7 +67,7 @@ function addEnvTex(scene){
 	});
 
 	// apply lightmap to material(s) (todo: lightmap intensity)
-	// const lightmapMounting = new BABYLON.Texture("assets/lightmap.png", scene);
+	// const lightmapMounting = new BABYLON.Texture("assets/textures/lightmap.png", scene);
 	// const materials = scene.materials;
 	// let matMounting = materials.find(obj => {return obj.name === 'mounting'});
 	// lightmapMounting.coordinatesIndex = 1;
