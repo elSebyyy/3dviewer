@@ -1,14 +1,14 @@
 {
 	"default": {
 		"name": "Model of superconducting quantum computer",
-		"text": "<strong>Quantum computers</strong> are expected to solve certain numerical problems significantly faster than classical computers. Various technological approaches are being pursued in laboratories worldwide. Similar to the case shown here, in all cases operating the quantum processor depends crucially on peripheral classical high-tech.",
-		"textDetails": "The present model displays a typical superconducting quantum computer setup inside dilution refrigerator, a type of cryostat. The dilution refrigerator provides stable operation conditions at cryogenic temperatures. We note that for a functioning system many further electronic devices are used, which are placed outside the cryostat. \nThe QPU, short for quantum processing unit, hosting the quantum bits, or qubits, forms the heart of the quantum computer. The shown setup poses a great technological challenge: the integration of low temperature electronics, which enable the fickle quantum computations on the QPU. \nForschungszentrum Jülich forms a national focus of quantum computing research ranging from fundamental quantum science to hardware development to applications. The aim of the Forschungszentrum is to establish a research, development and application ecosystem with academic and industrial partners.",
+		"text": "<strong>Quantum computers</strong> are expected to solve certain numerical problems significantly faster than classical computers. Various technological approaches of building a quantum processor are being pursued in laboratories worldwide, each of which have different technological challenges and advantages. Furthermore, the quantum computer depends crucially on peripheral classical high-tech such as cryotechnology and control electronics.",
+		"textDetails": "The present model displays a typical superconducting quantum computer setup , which is thermally and electrically insulated from interferences   inside the dilution refrigerator  , a type of cryostat. The dilution refrigerator provides stable operation conditions at cryogenic temperatures. We note that for a functioning system many further electronic devices   outside the cryostat are needed, such as microwave generators, oscilloscopes and a gas handling system. \nThe<ahref=” https://arxiv.org/pdf/1912.09410.pdf”> QPU</a>, short for quantum processing unit, hosting the quantum bits, or qubits,    forms the heart of the quantum computer. The shown setup poses a great technological challenge: the integration of low temperature electronics, which enable the fickle quantum computations on the QPU. \nForschungszentrum Jülich  forms a national focus of quantum computing research ranging from fundamental quantum science to hardware and software development to applications. The aim of the Forschungszentrum is to establish a research, development and application ecosystem with academic and industrial partners.",
 		"seq": 0
 	},
 	"plates": {
 		"name": "Bulk of cryostat",
-		"text": "<strong>Gold-plated copper disks</strong> operating at different cryogenic temperatures. These disks form the framework of the setup: all parts of the quantum computer are attached to these plates, and they are cooled to extremely low, or cryogenic temperatures by being in contact with the plates.",
-		"textDetails": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation. They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
+		"text": "<strong>Gold-plated copper disks</strong> operating at different cryogenic temperatures . These disks form the framework of the setup: all parts of the quantum computer are attached to these plates, and they are cooled to extremely low, or cryogenic temperatures by being in contact with the plates.",
+		"textDetails": "The cooling power is distributed via the copper disks from the central helium pipe towards the edges. Copper a is useful material largely used in cryogenics due to its high thermal conductivity. Gold-plated surfaces shield the disks from absorbing thermal radiation.   They also prevent oxidation of the plated material, thereby improving the quality of the thermal contacts on the surface and avoiding that the thermal conductivity of the bulk material decreases with time (without such plating, oxygen would diffuse inside the bulk).",
 		"seq": 1,
 		"objects": {
 			"plate_0": {
@@ -30,14 +30,14 @@
 	},
 	"electronic_circuit": {
 		"name": "Electronic Circuits",
-		"text": "<strong>Electronic circuits</strong> used for processing of quantum information. These circuits allow to carry out quantum computations by sending electronic signals that realize the quantum computing programs implemented by the user.",
-		"textDetails": "Quantum computations and readout are carried out by the application of microwaves, which are inserted via electronic circuits consisting of coaxial cables (some of which are made from superconducting material), different kind of microwave modules and power supply cables. The connection to the external world passes through the topmost disk. Specially designed circuit elements are required to work at cryogenic temperatures. \nCables are bent to prevent damage during thermal contraction or expansion, occuring each time the fridge is cooled down or warmed up. All cables are therefore either of flexible or semi-rigid types.",
+		"text": "<strong>Electronic circuits</strong> used for processing of quantum information. These circuits allow to carry out quantum computations by sending electronic signals to the QPU, which realizes the quantum computing programs implemented by the user.",
+		"textDetails": "Quantum computations and readout are carried out by the application of microwaves, which are inserted via electronic circuits consisting of coaxial cables (some of which are made from superconducting material), different kind of microwave modules and power supply cables. The connection to the external world passes through the topmost disk. Specially designed circuit elements are required to work at cryogenic temperatures. \nCables are bent to prevent damage during thermal contraction or expansion, occurring each time the cryostat is cooled down or warmed up. All cables are therefore either of flexible or semi-rigid types.",
 		"seq": 2,
 		"objects": {
 			"cables_control": {
 				"name": "Control lines",
 				"text": "Cables used for running quantum computations.",
-				"textDetails": "Coaxial cables transmit microwaves at Gigaherz frequencies from top to bottom to carry out quantum computations. The microwaves are generated by classical hardware such as microwave generators outside the cryostat.",
+				"textDetails": "Coaxial cables, some of which are superconducting  , transmit microwave signals from top to bottom (for triggering readout) and in reverse direction (for carrying readout signals from the QPU to the user). Readout signals need to be amplified inside the cryostat, and they are analyzed by classical hardware outside the cryostat.",
 				"seq": 3
 			},
 			"cables_measuring": {
@@ -48,12 +48,12 @@
 			},
 			"HEMTS": {
 				"name": "HEMTs",
-				"text": "Appearing behind the TWPA on the way of out the cryostat, the <strong>HEMTs</strong> (high electron mobility transistor) further amplify readout signals. Each HEMT is connected to a DC power source (are there also AC sources??), also shown here.",
+				"text": "Appearing behind the TWPA on the way out of the cryostat, the <strong>HEMTs  </strong> (high electron mobility transistor) further amplify readout signals. Each HEMT is connected to DC power sources.",
 				"seq": 5
 			},
 			"power_supply": {
 				"name": "Power supply cables",
-				"text": "These cables provide DC power supply for the HEMTs.",
+				"text": "These cables provide DC power supply for one of the HEMTs.",
 				"seq": 6
 			},
 
@@ -65,50 +65,50 @@
 			"attenuators": {
 				"name": "Attenuators",
 				"text": "The main purpose of the <strong>attenuators</strong> in this setup is to cool the coaxial cables.",
-				"textDetails": "In a common setting, an attenuator reduces the amplitude level of a passing microwave. The far more important action of the attenuators used here is to cool down the microwave cables by thermally through thermal contact with the disks of the cryostat. This is important, because the microwave cables are metallic and therefore conduct heat from outside of the fridge to the QPU, which needs to stay at extremely low temperatures.",
+				"textDetails": "In a common setting, an attenuator reduces the amplitude level of a passing microwave. The far more important action of the attenuators used here is to cool down the microwave cables through thermal contact with the disks of the cryostat. This is important, because the microwave cables are metallic and therefore conduct heat from outside of the fridge to the QPU, which creates additional thermal noise leading to calculation errors.",
 				"seq": 8
 			},
 			"open_cable": {
 				"name": "Open coaxial cable",
-				"text": "<strong>Open coaxial cable</strong> displaying internal conductor (central metallic wire) and dielectric) [surrounding layer, made from PTFE (Polytetrafluoroethylene)].",
+				"text": "This open coaxial cable</strong> illustrates the internal structure of a microwave line.  We see the internal conductor and the surrounding dielectric, which is made of PTFE, better known as Teflon.",
 				"seq": 9
 			},
 			"qpu": {
 				"name": "QPU",
-				"text": "<strong>Quantum processor</strong> (or quantum processing unit, short QPU), hosting qubits, performs central quantum information processing tasks. In the present setup, the physical qubits and their couplers consist of superconducting circuits comprising mainly capacitors, resonators and so-called Josephson junctions. Most contemporary circuits of this kind are made of aluminum, a superconductor with a critical temperature of 1.75 Kelvin (or approximately -271 degrees Celsius).",
+				"text": "<strong>Quantum processor</strong> (or quantum processing unit, short QPU), hosting qubits, performs central quantum information processing tasks. The physical qubits and their couplers consist of superconducting circuits comprising mainly capacitors, resonators, and so-called Josephson junctions. Most contemporary circuits on quantum processors are made of aluminum, which turns superconducting when cooled below its critical temperature of 1.75 Kelvin (or approximately -271 degrees Celsius).",
 				"seq": 10
 			},
 			"isolator": {
 				"name": "Microwave isolators",
-				"text": "<strong>Microwave isolators</strong>, or microwave circulators with one port terminated, prevent unwanted signals from disturbing the fragile quantum computations on the quantum processor, or QPU.",
+				"text": "<strong>Microwave isolators</strong>, or microwave circulators with one port terminated, prevent unwanted signals from disturbing the fragile quantum computations on the quantum processor (QPU).",
 				"seq": 11
 			},
 			"directional_coupler": {
 				"name": "Directional coupler",
-				"text": "<strong>Directional couplers</strong>, similar to frequency filters and bandpass isolators, further protect the QPU from unwanted external signals.",
+				"text": "<strong>Directional couplers</strong>, like frequency filters and bandpass isolators, further protect the QPU from unwanted external signals.",
 				"seq": 12
 			},
 			"TWPA": {
 				"name": "TWPA",
-				"text": "The <strong>TWPA</strong> (traveling wave parameteric amplifier) amplifies readout signals with near-quantum limited amplification.",
+				"text": "The <strong>TWPA</strong> (traveling wave parameteric amplifier) amplifies readout signals with near-quantum limited amplification, which means that the amplification at this step is almost as strong as nature allows.",
 				"seq": 13
 			}
 		}
 	},
 	"helium_system": {
 		"name": "Helium gas system",
-		"text": "<strong>Helium gas system</strong> providing stable cryogenic temperatures. The basic cooling process is based on evaporation of helium gas, and it is very different from conventional cooling in a refrigerator.",
+		"text": "<strong>Helium gas system</strong> providing stable cryogenic temperatures. The basic cooling process, based on mixing of different types of helium gas, is very different from conventional cooling in a refrigerator.",
 		"textDetails": "The continuous circular flow of a mixture of helium-3 and helium-4 enables stable cryogenic temperatures. An external gas handling system featuring pumps, helium purifiers and gas condensers, precool the helium-3 gas [e.g., using liquid nitrogen gas (at 77 K) and liquid helium-4 (at 4.2 K)] before passing it into the cryostat through the topmost disk.",
 		"seq": 14,
 		"objects": {
 			"gas_pipe": {
-				"name": "Helium gas pipe",
+				"name": "Helium gas pipes",
 				"text": "The <strong>helium gas line</strong> comprises two concentric pipes, the internal (supply) line and the external (discharge) line. The internal line inserts highly concentrated helium gas into the cryostat's cooling cycle, while the outer line deducts warmer gas from the cryostat into the external helium system for recycling.",
 				"seq": 15
 			},
 			"still": {
 				"name": "Still",
-				"text": "The <strong>still</strong> evaporates helium, mainly helium-3, which is then deducted from the cryostat for reprocessing in the helium cycle. This removal of helium-3 is a crucial step in the cooling process, since it compensates the increase of helium-3 occurring further below in the mixing chamber.",
+				"text": "The <strong>still</strong> evaporates helium, mainly helium-3, which is then deducted from the cryostat for reprocessing in the helium cycle. This removal of helium-3 is a crucial step in the cooling process, since it compensates the increase of helium-3 occurring below in the mixing chamber.",
 				"seq": 16
 			},
 			"heat_exchanger_round": {
@@ -119,13 +119,13 @@
 			},
 			"heat_exchanger_steps": {
 				"name": "Step heat exchanger",
-				"text": "The <strong>step heat exchanger</strong> cools down incoming gas. It thus acts similarly to the continuous heat exchanger, however it is significantly more efficient.",
-				"textDetails": "In each 'step' there are two metal tubes carrying helium gas that have been welded together. The walls of these tubes are made from sintered metal thus providing a very large surface area, which is necessary for reaching extremely low temperatures of less than 10 Millikelvin.",
+				"text": "The <strong>step heat exchanger</strong> cools down incoming gas. While it thus acts similarly to the continuous heat exchanger, it is significantly more efficient.",
+				"textDetails": "At each level there are two metal tubes  welded together, each of which carries helium gas (in opposite directions). The walls of these tubes are made from sintered metal resulting in a very large surface area, which is necessary for reaching extremely low temperatures of less than 10 Millikelvin.",
 				"seq": 18
 			},
 			"mixing_chamber": {
 				"name": "Mixing chamber",
-				"text": "In the <strong>mixing chamber</strong>, cooling power is generated by evaporating helium-3 into a helium-4 environment. This cooling process is comparable to the basic principle of an evaporative cooler.",
+				"text": "In the <strong>mixing chamber</strong>, cooling power is generated by mixing the two isotopes helium-3 and helium-4.",
 				"seq": 19
 			}
 		}
@@ -134,8 +134,8 @@
 		"objects": {
 			"plaque": {
 				"name": "Developers",
-				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office). S.D. developed the digital 3D model and website, D.Z. provided the technical contents and supervised the project. Last changes: March 2022.",
-				"textDetails": "(We would like to thank Roudy Hanna, Peter Schüffelgen of PGI-9 for letting us take a panorama picture of their laboratory for creating a background of the animation.) We thank Anna Bauer, Wolfgang Speier and Jan Timper for valuable discussions on how to present this animation. D.Z. is grateful for many stimulating discussions about the experimental setup of a superconducting quantum computer with many scientists at Forschungszentrum Jülich of PGI-9, PGI-11, PGI-13, most noteworthy with Pavel Bushev, Benedikt Frohn, Roudy Hanna, Albert Hertel, Markus Jerger, Andrea Raccanelli, Anne Schmidt and Frank Wilhelm-Mauch.",
+				"text": "Sebastian Droege and Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institute (PGI-Science Office). S.D. developed the digital 3D model and website, D.Z. provided the technical contents and supervised the project. Last changes: May 2022.",
+				"textDetails": "We would like to thank Roudy Hanna and Peter Schüffelgen of PGI-9 for letting us take a panorama picture of their laboratory for creating a background of the animation. We thank Anna Bauer, Wolfgang Speier, and Jan Timper for valuable discussions on how to present this virtual model. D.Z. is grateful for many stimulating discussions about the experimental setup of a superconducting quantum computer with many scientists at Forschungszentrum Jülich of PGI-9, PGI-11, PGI-13, among them are Pavel Bushev, Benedikt Frohn, Roudy Hanna, Albert Hertel, Markus Jerger, Andrea Raccanelli, Anne Schmidt and Frank Wilhelm-Mauch.",
 				"seq": 20
 			}
 		}
