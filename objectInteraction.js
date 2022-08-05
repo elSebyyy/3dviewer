@@ -268,7 +268,8 @@ const createObjInteractions = function(scene){
                     objMesh.renderOverlay = false;
                 }));
             }
-
+            
+            // click on object
             objMesh.inspectableCustomProperties = {
                 select: function(){
                     clearSelection(false);

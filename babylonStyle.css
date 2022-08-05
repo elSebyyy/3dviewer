@@ -45,7 +45,15 @@
 }
 
 a {
-	color: #ffb13d;
+	color: hsl(150, 100%, 60%);
+	background-color: transparent;
+	text-decoration: none;
+  }
+  
+a:hover {
+color: hsl(150, 100%, 80%);
+background-color: transparent;
+text-decoration: underline;
 }
 
 #showmoreCB:checked ~ .moretext {
@@ -73,3 +81,11 @@ input[id="showmoreCB"]:not(:checked) + .showmore::before {
 	text-decoration: underline #ffb13d 2px;
 	cursor: pointer;
 }
+
+.showmore:hover{
+	color: hsl(36, 100%, 74%);
+	font-style: italic;
+	text-decoration: underline hsl(36, 100%, 74%) 2px;
+	cursor: pointer;
+}
+
