@@ -1,5 +1,11 @@
 const colFZJ = "#023d6b"
 const colHighlight = BABYLON.Color3.Green();
+var viewerLanguage = 'de_DE';
+var de_DE;
+var en_US;
+var currentMode = 'none';
+var currentSelection = 'default';
+var showUI = true;
 
 // get the scene of the Babylon Viewer
 BabylonViewer.viewerManager
@@ -13,12 +19,31 @@ BabylonViewer.viewerManager
 		})
 	});
 
-const getHTMLText = function(inst){
-    let htmlText = inst.text;
-    if (inst.hasOwnProperty('textDetails')){
-        htmlText += "<br><input type='checkbox' id='showmoreCB' /> <label for='showmoreCB' class='showmore'></label> <span class='moretext'>";
-        htmlText += inst.textDetails + "</span>";
+// get the text by ID in the current viewer language
+const getTransText = function(id){
+    if(viewerLanguage == 'de_DE'){
+        return de_DE.getElementById(id).innerHTML;
     }
+    return en_US.getElementById(id).innerHTML;
+} 
+
+// get XML file as Map
+const requestFile = function(file){
+    let request = new XMLHttpRequest();
+    request.open("GET", file, false);
+    request.send(null);
+    return request
+}
+
+// merge text information into HTML
+const getHTMLText = function(inst){
+    let htmlText = getTransText(inst.text);
+    if (inst.hasOwnProperty('textDetails')){
+        htmlText += "<br><input type='checkbox' id='showmoreCB' /> <label for='showmoreCB' class='showmore'></label> <span id='moretext'>";
+        htmlText += getTransText(inst.textDetails) + "</span>";
+    }
+    document.documentElement.style.setProperty('--showmore', "'" + getTransText('show_more') + "'");
+    document.documentElement.style.setProperty('--showless', "'" + getTransText('show_less') + "'");
     return htmlText;
 }
 
@@ -41,15 +66,11 @@ const createObjInteractions = function(scene){
     // get camera
     let camera = scene.activeCamera;
 
-    // read JSON file    
-    let request = new XMLHttpRequest();
-    request.open("GET", "assets/configs/textfields.json", false);
-    request.send(null);
-    let textfields = JSON.parse(request.responseText);
-    request = new XMLHttpRequest();
-    request.open("GET", "assets/configs/nametagsPositions.json", false);
-    request.send(null);
-    let nametagPositions = JSON.parse(request.responseText);
+    // load config files   
+    let textfields = JSON.parse(requestFile('assets/configs/textfields.json').responseText);
+    let nametagPositions = JSON.parse(requestFile('assets/configs/nametagsPositions.json').responseText);
+    de_DE = requestFile('assets/lang/de_DE.xml').responseXML;
+    en_US = requestFile('assets/lang/en_US.xml').responseXML;
 
     // create highlight layer/ outlines
     let hl = new BABYLON.HighlightLayer("hl1", scene);
@@ -74,8 +95,11 @@ const createObjInteractions = function(scene){
     let canvasElement = document.querySelector('viewer');
     let infoBox = document.createElement('div');
     infoBox.id = "infoBox";
-    
     infoBox.innerHTML = getHTMLText(textfields.default);
+    infoBox.currentTextInfo = textfields.default;
+    infoBox.reload = function(){
+        this.innerHTML = getHTMLText(this.currentTextInfo);
+    }
     canvasElement.appendChild(infoBox);
 
     // fullscreen toggles
@@ -168,10 +192,6 @@ const createObjInteractions = function(scene){
     }
     
     // add object interactions
-    var currentMode = 'none'
-    var currentSelection = 'default'
-    var showUI = true;
-    var viewerLanguage = 'eng';
     let nametags = {};
     Object.keys(textfields).forEach(function(modeName){
         let modeInfo = textfields[modeName];
@@ -218,9 +238,12 @@ const createObjInteractions = function(scene){
             nametagTextBox.paddingRight = padding;
             nametagTextBox.paddingLeft = padding;
             nametagTextBox.fontSize = "50%";
-            nametagTextBox.text = objInfo.name;
+            nametagTextBox.text = getTransText(objInfo.name);
             nametagTextBox.color = "white";
             buttonNametag.addControl(nametagTextBox);
+            buttonNametag.reload = function() {
+                this.children[0].text = getTransText(objInfo.name);
+            }
 
             // update position
             scene.registerBeforeRender(function () {
@@ -274,6 +297,7 @@ const createObjInteractions = function(scene){
                 select: function(){
                     clearSelection(false);
                     infoBox.innerHTML = getHTMLText(objInfo); // Obj Text
+                    infoBox.currentTextInfo = objInfo;
                     buttonNametag.isVisible = true; //show nametag
                     hl.addMesh(objMesh, colHighlight); // highlight
                     cameraShot(objName);
@@ -324,6 +348,7 @@ const createObjInteractions = function(scene){
             }
             if(toDefault){
                 infoBox.innerHTML = getHTMLText(textfields.default); // default text
+                infoBox.currentTextInfo = textfields.default;
                 currentMode = 'none';
                 currentSelection = 'default';
                 cameraShot('default');
@@ -334,6 +359,7 @@ const createObjInteractions = function(scene){
     const selectMode = function(modeName, modeInfo){
         clearSelection(false);
         infoBox.innerHTML = getHTMLText(modeInfo); // Mode Text
+        infoBox.currentTextInfo = modeInfo;
         nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
         scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, colHighlight)); // highlight all
         cameraShot(modeName);
@@ -455,10 +481,11 @@ const createObjInteractions = function(scene){
     buttonHideUI.color = "transparent";
     buttonHideUI.hoverCursor = "pointer";
     advancedTexture.addControl(buttonHideUI);
-
+    
+    const imgByLang = {'de_DE': 'assets/buttons/language_de_DE.png', 'en_US': 'assets/buttons/language_en_US.png'};
     let buttonChangeLang = BABYLON.GUI.Button.CreateImageOnlyButton(
         "buttonChangeLang",
-        "assets/buttons/language_eng.png"
+        imgByLang[viewerLanguage]
     );
     buttonChangeLang.image.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
     buttonChangeLang.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
@@ -504,21 +531,23 @@ const createObjInteractions = function(scene){
             buttonsDisable.forEach(function(button){
                 button.isEnabled = true;
                 button.isVisible = true;
-            })
+            });
             infoBox.style.display = 'initial';
             showUI = true;
         }
     });
 
     buttonChangeLang.onPointerClickObservable.add(function(){
-        if(viewerLanguage == 'eng'){
-            buttonChangeLang.children[0].source = "assets/buttons/language_ger.png";
-            viewerLanguage = 'ger';
+        if(viewerLanguage == 'en_US'){
+            buttonChangeLang.children[0].source = imgByLang['de_DE'];
+            viewerLanguage = 'de_DE';
         }
         else{
-            buttonChangeLang.children[0].source = "assets/buttons/language_eng.png";
-            viewerLanguage = 'eng';
+            buttonChangeLang.children[0].source = imgByLang['en_US'];
+            viewerLanguage = 'en_US';
         }
+        Object.values(nametags).forEach(nametagModes => nametagModes.forEach(nametag => nametag.reload()));
+        infoBox.reload();
     });
         
     // make buttons bigger when hovered

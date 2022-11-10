@@ -1,3 +1,8 @@
+:root{
+	--showless: "Show less";
+	--showmore: "Show more";
+}
+
 #infoBox {
 	text-indent: 1em;
 	position: absolute;
@@ -56,19 +61,19 @@ background-color: transparent;
 text-decoration: underline;
 }
 
-#showmoreCB:checked ~ .moretext {
+#showmoreCB:checked ~ #moretext {
 	display: block;
 }
 
 input[id="showmoreCB"]:checked + .showmore::before {
-	content: "Show less";
+	content: var(--showless);
 }
 
 input[id="showmoreCB"]:not(:checked) + .showmore::before {
-	content: "Show more ";
+	content: var(--showmore);
 }
 
-.moretext {
+#moretext {
 	display: none;
 }
 
