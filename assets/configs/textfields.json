@@ -5,11 +5,17 @@
 		"textDetails": "default_textDetails",
 		"seq": 0
 	},
+	"hull": {
+		"name": "hull_name",
+		"text": "hull_text",
+		"textDetails": "hull_textDetails",
+		"seq": 1
+	},
 	"plates": {
 		"name": "plates_name",
 		"text": "plates_text",
 		"textDetails": "plates_textDetails",
-		"seq": 1,
+		"seq": 2,
 		"objects": {
 			"plate_0": {
 				"name": "plate_0_name"
@@ -32,65 +38,65 @@
 		"name": "electronic_circuit_name",
 		"text": "electronic_circuit_text",
 		"textDetails": "electronic_circuit_textDetails",
-		"seq": 2,
+		"seq": 3,
 		"objects": {
 			"cables_control": {
 				"name": "cables_control_name",
 				"text": "cables_control_text",
 				"textDetails": "cables_control_textDetails",
-				"seq": 3
+				"seq": 4
 			},
 			"cables_measuring": {
 				"name": "cables_measuring_name",
 				"text": "cables_measuring_text",
 				"textDetails": "cables_measuring_textDetails",
-				"seq": 4
+				"seq": 5
 			},
 			"HEMTS": {
 				"name": "HEMTS_name",
 				"text": "HEMTS_text",
-				"seq": 5
+				"seq": 6
 			},
 			"power_supply": {
 				"name": "power_supply_name",
 				"text": "power_supply_text",
-				"seq": 6
+				"seq": 7
 			},
 			"filter_bandpass": {
 				"name": "filter_bandpass_name",
 				"text": "filter_bandpass_text",
-				"seq": 7
+				"seq": 8
 			},
 			"attenuators": {
 				"name": "attenuators_name",
 				"text": "attenuators_text",
 				"textDetails": "attenuators_textDetails",
-				"seq": 8
+				"seq": 9
 			},
 			"open_cable": {
 				"name": "open_cable_name",
 				"text": "open_cable_text",
-				"seq": 9
+				"seq": 10
 			},
 			"qpu": {
 				"name": "qpu_name",
 				"text": "qpu_text",
-				"seq": 10
+				"seq": 11
 			},
 			"isolator": {
 				"name": "isolator_name",
 				"text": "isolator_text",
-				"seq": 11
+				"seq": 12
 			},
 			"directional_coupler": {
 				"name": "directional_coupler_name",
 				"text": "directional_coupler_text",
-				"seq": 12
+				"seq": 13
 			},
 			"TWPA": {
 				"name": "TWPA_name",
 				"text": "TWPA_text",
-				"seq": 13
+				"seq": 14
 			}
 		}
 	},
@@ -98,34 +104,34 @@
 		"name": "helium_system_name",
 		"text": "helium_system_text",
 		"textDetails": "helium_system_textDetails",
-		"seq": 14,
+		"seq": 15,
 		"objects": {
 			"gas_pipe": {
 				"name": "gas_pipe_name",
 				"text": "gas_pipe_text",
-				"seq": 15
+				"seq": 16
 			},
 			"still": {
 				"name": "still_name",
 				"text": "still_text",
-				"seq": 16
+				"seq": 17
 			},
 			"heat_exchanger_round": {
 				"name": "heat_exchanger_round_name",
 				"text": "heat_exchanger_round_text",
 				"textDetails": "heat_exchanger_round_textDetails",
-				"seq": 17
+				"seq": 18
 			},
 			"heat_exchanger_steps": {
 				"name": "heat_exchanger_steps_name",
 				"text": "heat_exchanger_steps_text",
 				"textDetails": "heat_exchanger_steps_textDetails",
-				"seq": 18
+				"seq": 19
 			},
 			"mixing_chamber": {
 				"name": "mixing_chamber_name",
 				"text": "mixing_chamber_text",
-				"seq": 19
+				"seq": 20
 			}
 		}
 	},
@@ -135,7 +141,7 @@
 				"name": "plaque_name",
 				"text": "plaque_text",
 				"textDetails": "plaque_textDetails",
-				"seq": 20
+				"seq": 21
 			}
 		}
 	}

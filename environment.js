@@ -40,10 +40,12 @@ function addEnvTex(scene){
 	let camera = scene.activeCamera;
 	camera.useBouncingBehavior = false;
 	camera.wheelPrecision = 300;
-	camera.panningSensibility = 500;
 	camera.panningInertia = 0.9;
+	camera.panningDistanceLimit = 5;
 	camera.wheelDeltaPercentage = 0.05;
-	camera.upperRadiusLimit = 5.0;
+	camera.lowerRadiusLimit = 1;
+	camera.upperRadiusLimit = 10;
+	console.log(camera.upperRadiusLimit);
 	//camera.fov = 0.9;
 
 	// set camera collision
@@ -65,7 +67,7 @@ function addEnvTex(scene){
 		}
 		//item.showBoundingBox = true;
 	});
-
+	setTimeout( function() { camera.upperRadiusLimit=10 }, 2000);
 	// apply lightmap to material(s) (todo: lightmap intensity)
 	// const lightmapMounting = new BABYLON.Texture("assets/textures/lightmap.png", scene);
 	// const materials = scene.materials;

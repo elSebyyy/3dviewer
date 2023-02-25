@@ -1,5 +1,9 @@
 const colFZJ = "#023d6b"
 const colHighlight = BABYLON.Color3.Green();
+const colModes = {default: "#023D6B", single: "#023D6B", plates: "#5F9F10", helium_system: "#002F86", electronic_circuit: "#FF3838", hull: "#E7D200"};
+const overlayPrimary = 0.5
+const overlaySecondary = 0.15
+
 var viewerLanguage = 'de_DE';
 var de_DE;
 var en_US;
@@ -79,8 +83,8 @@ const createObjInteractions = function(scene){
     let alpha = 0;
     scene.registerBeforeRender(() => {
         alpha += 0.06;
-        hl.blurHorizontalSize = 0.5 + Math.cos(alpha) * 0.6 + 0.6;
-        hl.blurVerticalSize = 0.5 + Math.sin(alpha /3) * 0.6 + 0.6;
+        hl.blurHorizontalSize = 1.0 + Math.cos(alpha) * 0.6 + 0.6;
+        hl.blurVerticalSize = 1.0 + Math.sin(alpha /3) * 0.6 + 0.6;
     });
     
     //create UI
@@ -93,14 +97,43 @@ const createObjInteractions = function(scene){
     engine.setHardwareScalingLevel(1 / window.devicePixelRatio);
     
     let canvasElement = document.querySelector('viewer');
+    
+    // info box
     let infoBox = document.createElement('div');
     infoBox.id = "infoBox";
     infoBox.innerHTML = getHTMLText(textfields.default);
     infoBox.currentTextInfo = textfields.default;
     infoBox.reload = function(){
         this.innerHTML = getHTMLText(this.currentTextInfo);
-    }
+    };
+
+    // mode selection buttons
+    let modesContainer = document.createElement('div');
+    modesContainer.id = "modesContainer";
+    let button_default = document.createElement('button');
+    let button_hull = document.createElement('button');
+    let button_plates = document.createElement('button');
+    let button_electronic_circuit = document.createElement('button');
+    let button_helium_system = document.createElement('button');
+    let modeButtons = {default: button_default, hull: button_hull, plates: button_plates, electronic_circuit: button_electronic_circuit, helium_system: button_helium_system};
+    Object.keys(modeButtons).forEach((mode) => {
+        let button = modeButtons[mode];
+        modesContainer.appendChild(button);
+        button.id = "modeButton";
+        button.style.backgroundColor = colModes[mode];
+        button.onclick = (()=> selectMode(mode, textfields[mode]));
+        button.innerHTML = getTransText(textfields[mode].name);
+        button.reload = function(){
+            this.innerHTML = getTransText(textfields[mode].name);
+        };
+    })
+    button_default.innerHTML = getTransText('button_default');
+    button_default.reload = function(){
+        this.innerHTML = getTransText('button_default');
+    };
+    button_helium_system.style.backgroundColor ='#729FCF'
     canvasElement.appendChild(infoBox);
+    canvasElement.appendChild(modesContainer);
 
     // fullscreen toggles
     const enterFullscreen = function(){	  
@@ -259,38 +292,35 @@ const createObjInteractions = function(scene){
             
             objMesh.actionManager = new BABYLON.ActionManager(scene);
             // mouse over object
-            objMesh.overlayColor = new BABYLON.Color3.FromHexString(colFZJ)
-            objMesh.overlayAlpha = 0.5;
-            if(['helium_system', 'electronic_circuit', 'plates'].includes(modeName)){
-                objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
-                    if(! showUI){
-                        return;
-                    }
-                    if(currentMode == "none"){      
-                        scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
-                    }
-                    else if(currentMode == modeName){
-                        objMesh.renderOverlay = true;
-                    }
-                }));
+            objMesh.overlayColor = new BABYLON.Color3.FromHexString(colModes[modeName]);
+            objMesh.overlayAlpha = overlayPrimary;
             
-                objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
-                    scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = false);
+            if(modeName == 'plates'){
+                objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
+                    if(! showUI){
+                        return;
+                    }    
+                    scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
                 }));
             }
-            else if (modeName == 'single'){
+            else{
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
                     if(! showUI){
                         return;
                     }
-                    if(currentMode == "none"){
-                        objMesh.renderOverlay = true;
-                    }
-                }));
-                objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
-                    objMesh.renderOverlay = false;
+                    scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
+                    scene.getMeshesByTags(modeName, (mesh) => mesh.overlayAlpha = overlaySecondary);
+                    buttonNametag.isVisible = true; //show nametag
+                    objMesh.overlayAlpha = overlayPrimary;
                 }));
             }
+
+            objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function () {
+                scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = false);
+                if(currentSelection != objMesh && currentSelection != modeName){
+                    buttonNametag.isVisible = false; //hide nametag
+                }
+            }));
             
             // click on object
             objMesh.inspectableCustomProperties = {
@@ -299,28 +329,33 @@ const createObjInteractions = function(scene){
                     infoBox.innerHTML = getHTMLText(objInfo); // Obj Text
                     infoBox.currentTextInfo = objInfo;
                     buttonNametag.isVisible = true; //show nametag
-                    hl.addMesh(objMesh, colHighlight); // highlight
+                    hl.addMesh(objMesh, new BABYLON.Color3.FromHexString(colModes[modeName])); // highlight
                     cameraShot(objName);
                     currentSelection = objMesh;
-                    currentMode = modeName == 'single' ? 'none' : modeName;
+                    currentMode = modeName;
                 }
             };
+
 
             const clickObjectAction = function(){
                 if(! showUI){
                     return;
                 }
-                if(currentMode == 'none' && modeName != 'single'){
-                    selectMode(modeName, modeInfo);
-                }
-                else if(currentMode == modeName || (currentMode == 'none' && modeName == 'single')){
-                    if(currentSelection == objMesh){
+                if(modeName == 'plates'){
+                    if(currentSelection == modeName){
                         clearSelection(true);
+                    }
+                    else{
+                        selectMode(modeName, modeInfo);
+                    }
+                }
+
+                else if(currentSelection == objMesh){
+                    clearSelection(true);
                     }
                     else{
                         objMesh.inspectableCustomProperties.select();
                     }
-                }
             }
 
             if(['helium_system', 'electronic_circuit', 'plates', 'single'].includes(modeName)){
@@ -339,7 +374,9 @@ const createObjInteractions = function(scene){
     const clearSelection = function(toDefault) {
         if(currentSelection != 'default'){
             if((typeof currentSelection) == "string"){
-                nametags[currentSelection].forEach(i => i.isVisible = false); // hide all nametags
+                if(! ['default', 'hull'].includes(currentSelection)){
+                    nametags[currentSelection].forEach(i => i.isVisible = false); // hide all nametags
+                }
                 scene.getMeshesByTags(currentSelection, (mesh) => hl.removeMesh(mesh)); // hide all highlights
             }
             else{
@@ -360,11 +397,13 @@ const createObjInteractions = function(scene){
         clearSelection(false);
         infoBox.innerHTML = getHTMLText(modeInfo); // Mode Text
         infoBox.currentTextInfo = modeInfo;
-        nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
-        scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, colHighlight)); // highlight all
+        if(! ['default', 'hull'].includes(modeName)){
+            nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
+        }
+        scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, new BABYLON.Color3.FromHexString(colModes[modeName]))); // highlight all
         cameraShot(modeName);
         currentSelection = modeName;
-        currentMode = (modeName == 'plates')? "none" : modeName;
+        currentMode = modeName;
     }
 
     const forwardSelection = function (direction) {
@@ -548,6 +587,7 @@ const createObjInteractions = function(scene){
         }
         Object.values(nametags).forEach(nametagModes => nametagModes.forEach(nametag => nametag.reload()));
         infoBox.reload();
+        Object.values(modeButtons).forEach(element => element.reload());
     });
         
     // make buttons bigger when hovered
@@ -558,7 +598,7 @@ const createObjInteractions = function(scene){
         engine.resize();
     });
 
-    // set camera to default position
+    //set camera to default position
     if (nametagPositions.hasOwnProperty('camera_default') && nametagPositions.hasOwnProperty('cameraTarget_default')) {
         cameraShot('default');
     }

@@ -3,15 +3,50 @@
 	--showmore: "Show more";
 }
 
+#modesContainer {
+	position: absolute;
+	width: 20%;
+	height: 40%;
+	top:20%;
+	left: 2%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 4%;
+	padding: 1%;
+	pointer-events: none;
+	user-select: none;
+}
+  
+#modeButton {
+	opacity: 0.8;
+	padding-inline: 3%;
+	padding-block: 2%;
+	display: inline-block;
+	text-align: center;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 1vw;
+	border-radius: 2vw;
+	border: 0.15vw solid white;
+	background-color: #023d6b;
+	color: white;
+	pointer-events: auto;
+}
+  
+#modeButton:hover {
+	filter: brightness(0.5);
+	cursor: pointer;
+}
+
 #infoBox {
-	text-indent: 1em;
 	position: absolute;
 	width: 35%;
 	top: 2%;
 	right: 2%;
 	background: #023d6b;
-	border: 1px solid white;
-	border-radius: 10px;
+	border: 0.15vw solid white;
+	border-radius: 1vw;
 	opacity: 0.8;
 	max-width: 35%;
 	max-height: 75%;
@@ -31,18 +66,18 @@
 }
 
 #infoBox::-webkit-scrollbar {
-	width: 12px;
-	height: 12px;
+	width: 1vw;
+	height: 1vw;
 }
 
 #infoBox::-webkit-scrollbar-track {
-	border: 1px solid CornflowerBlue;
-	border-radius: 10px;
+	border: 0.2vw solid CornflowerBlue;
+	border-radius: 1vw;
 }
 
 #infoBox::-webkit-scrollbar-thumb {
 	background: CornflowerBlue;
-	border-radius: 10px;
+	border-radius: 1vw;
 }
 
 #infoBox::-webkit-scrollbar-thumb:hover {
@@ -83,14 +118,16 @@ input[id="showmoreCB"]:not(:checked) + .showmore::before {
 .showmore {
 	color: #ffb13d;
 	font-style: italic;
-	text-decoration: underline #ffb13d 2px;
+	text-decoration: underline #ffb13d 0.15vw;
 	cursor: pointer;
 }
 
 .showmore:hover{
 	color: hsl(36, 100%, 74%);
 	font-style: italic;
-	text-decoration: underline hsl(36, 100%, 74%) 2px;
+	text-decoration: underline hsl(36, 100%, 74%) 0.2vw;
 	cursor: pointer;
 }
-
+p {
+	font-size: 1.5vw;
+  }

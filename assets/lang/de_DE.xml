@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
+    <text id="button_default">Standard</text>
     <text id="show_more">Zeige mehr</text>
     <text id="show_less">Zeige weniger</text>
     <text id="default_name">Modell eines supraleitenden Quantencomputers</text>
     <text id="default_text"><strong>Quantencomputer</strong> sollen bestimmte numerische Probleme deutlich schneller lösen als klassische Computer. Verschiedene technologische Ansätze zum Bau eines Quantenprozessors werden in Labors weltweit verfolgt, die jeweils unterschiedliche technologische Herausforderungen und Vorteile aufweisen. Zudem hängt der Quantencomputer entscheidend von peripherer klassischer Hochtechnologie, wie der Kryotechnologie und der Steuerelektronik ab.</text>
     <text id="default_textDetails">Das hier vorgestellte Modell zeigt einen typischen Aufbau eines supraleitenden Quantencomputers, der im Inneren des Mischkryostaten thermisch und elektrisch gegen Störeinflüsse isoliert ist. Der Mischkryostat sorgt für stabile Betriebsbedingungen bei kryogenen Temperaturen. Damit das System funktioniert, sind viele weitere elektronische Geräte außerhalb des Kryostats erforderlich, wie Mikrowellengeneratoren, Oszilloskope und ein Gasbehandlungssystem. <br/> Die QPU, kurz für Quantum Processing Unit, in der die Quantenbits untergebracht sind, bildet das Herzstück des Quantencomputers. Der gezeigte Aufbau stellt eine große technologische Herausforderung dar: die Integration von Niedertemperatur-Elektronik, die die unbeständigen Quantenberechnungen auf der QPU ermöglicht. <br/> Das Forschungszentrum Jülich bildet einen nationalen Schwerpunkt der Quantencomputerforschung, der von der Quantengrundlagenforschung über die Hard- und Softwareentwicklung bis hin zu Anwendungen reicht. Das Ziel des Forschungszentrums ist es, ein Forschungs-, Entwicklungs- und Anwendungsökosystem mit akademischen und industriellen Partnern aufzubauen. <br/> Eine verständliche Einführung in das Jülicher Quantencomputing finden Sie auch in der EffZett Ausgabe 1-22 'Cool Calculators'</text>
-    <text id="plates_name">Bulk of cryostat</text>
+	<text id="hull_name">Hülle</text>
+	<text id="hull_text">tbd</text>
+	<text id="hull_textDetails">tbd</text>
+    <text id="plates_name">Kryostat</text>
     <text id="plates_text"><strong>Vergoldete Kupferplatten</strong>, die bei verschiedenen kryogenen Temperaturen betrieben werden. Diese Scheiben bilden das Gerüst des Aufbaus: Alle Teile des Quantencomputers sind an diesen Platten befestigt und werden durch den Kontakt mit den Platten auf extrem niedrige oder kryogene Temperaturen gekühlt.</text>
     <text id="plates_textDetails">Die Kühlleistung wird über die Kupferscheiben vom zentralen Heliumrohr zu den Rändern hin verteilt. Kupfer ist ein nützliches Material, das aufgrund seiner hohen Wärmeleitfähigkeit in der Kryotechnik häufig verwendet wird. Vergoldete Oberflächen schützen die Scheiben vor der Absorption von Wärmestrahlung. Sie verhindern auch die Oxidation des beschichteten Materials, wodurch die Qualität der Wärmekontakte an der Oberfläche verbessert. Gleichzeitg wird vermieden, dass die Wärmeleitfähigkeit des Grundmaterials mit der Zeit abnimmt (ohne eine solche Beschichtung würde der Sauerstoff in das Grundmaterial diffundieren).</text>
     <text id="plate_0_name">~50K (-223°C)</text>
@@ -24,7 +28,7 @@
     <text id="cables_measuring_textDetails">Koaxialkabel, teilweise supraleitend, übertragen Mikrowellensignale von oben nach unten (zur Auslösung der Auslesung) und in umgekehrter Richtung (zur Übertragung der Auslesesignale von der QPU an den Benutzer). Die Auslesesignale müssen innerhalb des Kryostats verstärkt werden und werden mit klassischer Hardware außerhalb des Kryostats analysiert.</text>
     <text id="HEMTS_name">HEMTs</text>
     <text id="HEMTS_text">Die <strong>HEMTs</strong> (Transistoren mit hoher Elektronenbeweglichkeit), die hinter dem TWPA auf dem Weg aus dem Kryostaten erscheinen, verstärken die Auslesesignale weiter. Jeder HEMT ist an eine Gleichstromquelle angeschlossen.</text>
-    <text id="power_supply_name">Power supply cables</text>
+    <text id="power_supply_name">Stromkabel</text>
     <text id="power_supply_text"><strong>Stromkabel</strong> liefern die Gleichstromversorgung für je einen der HEMTs. </text>
     <text id="filter_bandpass_name">Bandpass-Filter</text>
     <text id="filter_bandpass_text">Hoch- und Tief- <strong>Frequenzbandpassfilter</strong> schützen die QPU vor unerwünschten externen hoch- und/oder niederfrequenten Störungen.</text>
@@ -44,7 +48,7 @@
     <text id="helium_system_name">Heliumgas-System</text>
     <text id="helium_system_text"><strong>Heliumgas-System</strong>, das stabile kryogene Temperaturen liefert. Der grundlegende Kühlprozess in einem Verdünnungskühlschrank basiert auf dem Mischen verschiedener Arten von Heliumgas (He-Isotopen), was sich stark von der herkömmlichen Kühlung in einem Kühlschrank unterscheidet.</text>
     <text id="helium_system_textDetails"> Der kontinuierliche Kreislauf einer Mischung aus Helium-3 und Helium-4 ermöglicht stabile kryogene Temperaturen. Ein externes Gashandhabungssystem mit Pumpen, Heliumreinigern und Gaskondensatoren kühlt das Helium-3-Gas vor, bevor es durch die oberste Scheibe in den Kryostaten geleitet wird [z. B. mit flüssigem Stickstoff (bei 77 K) und flüssigem Helium-4 (bei 4,2 K)].</text>
-    <text id="gas_pipe_name">Helium gas pipes</text>
+    <text id="gas_pipe_name">Heliumgasleitung</text>
     <text id="gas_pipe_text">Die <strong>Heliumgasleitung</strong> besteht aus zwei konzentrischen Rohren, der inneren (Zufuhr-) Leitung und der äußeren (Abfuhr-) Leitung. Die innere Leitung führt hochkonzentriertes Heliumgas in den Kühlkreislauf des Kryostaten ein, während die äußere Leitung wärmeres Gas aus dem Kryostaten in das externe Heliumsystem zur Wiederverwendung ableitet.</text>
     <text id="still_name">Destillator</text>
     <text id="still_text">Der <strong>Destillator</strong> verdampft Helium, hauptsächlich Helium-3, das dann aus dem Kryostaten zur Wiederaufbereitung im Heliumkreislauf abgezogen wird. Dieser Abzug von Helium-3 ist ein entscheidender Schritt im Kühlprozess, da er den Anstieg von Helium-3 in der Mischkammer darunter ausgleicht.</text>
@@ -55,7 +59,7 @@
     <text id="heat_exchanger_steps_text">Der <strong>Stufenwärmetauscher</strong> kühlt das einströmende Gas ab. Er funktioniert damit ähnlich wie der kontinuierliche Wärmetauscher, ist aber deutlich effizienter.</text>
     <text id="heat_exchanger_steps_textDetails"> Auf jeder Ebene befinden sich zwei miteinander verschweißte Metallrohre, die jeweils Heliumgas (in entgegengesetzter Richtung) führen. Die Wandungen dieser Rohre bestehen aus gesintertem Metall, was zu einer sehr großen Oberfläche führt und somit den Wärmefluss erhöht, der für das Erreichen extrem niedriger Temperaturen von weniger als 10 Millikelvin erforderlich ist.</text>
     <text id="mixing_chamber_name">Mischkammer</text>
-    <text id="mixing_chamber_text"> In der <strong>Mischkammer</strong> des Verdünnungskühlschranks wird durch Mischen der beiden Isotope Helium-3 und Helium-4 Kälte erzeugt.</text>
+    <text id="mixing_chamber_text"> In der <strong>Mischkammer</strong> wird durch Vermischen der beiden Isotope Helium-3 und Helium-4 die tiefste Kälte im Verdünnungskühlschrank erzeugt.</text>
     <text id="plaque_name">Entwickler</text>
     <text id="plaque_text">Sebastian Droege und Daniel Zeuch, Forschungszentrum Jülich, Peter Grünberg Institut (PGI-Science Office). S.D. entwickelte das digitale 3D-Modell und die Website, D.Z. lieferte die technischen Inhalte und betreute das Projekt. Letzte Änderungen: Mai 2022.</text>
     <text id="plaque_textDetails">Wir danken Roudy Hanna und Peter Schüffelgen vom PGI-9 für die Überlassung eines Panoramabildes ihres Labors als Hintergrund für die Animation. Wir danken Anna Bauer, Wolfgang Speier und Jan Timper für wertvolle Diskussionen über die Darstellung dieses virtuellen Modells. D.Z. ist dankbar für viele anregende Diskussionen über den experimentellen Aufbau eines supraleitenden Quantencomputers mit vielen Wissenschaftlern am Forschungszentrum Jülich von PGI-9, PGI-11, PGI-13, darunter Pavel Bushev, Benedikt Frohn, Roudy Hanna, Albert Hertel, Markus Jerger, Andrea Raccanelli, Anne Schmidt und Frank Wilhelm-Mauch.</text>
