@@ -48,7 +48,7 @@
 
 		<link rel="stylesheet" href="babylonStyle.css" />
 
-		<script>
+		<!-- <script>
 			if (
 				!window.confirm(
 					'This website is licensed under CC-BY-NC-ND-4.0. Sharing images of this website is only allowed if "Forschungszentrum Jülich GmbH" and the license identifier is mentioned.'
@@ -56,7 +56,8 @@
 			) {
 				window.close()
 			}
-		</script>
+		</script> -->
+		
 		<!-- insert Babylon Model Viewer -->
 		<div class="babylon">
 			<babylon
@@ -66,20 +67,6 @@
 				configuration="assets/configs/viewerConfig.json"
 			></babylon>
 		</div>
-
-		<!-- configurate Babylon Model Viewer -->
-		<!-- <script src="merge.js"></script>
-		<script>
-			BabylonViewer.viewerManager
-				.getViewerPromiseById("qcModel")
-				.then(function (viewer) {
-					viewer.onSceneInitObservable.add(function (scene) {
-						scene.executeWhenReady(function (scene) {
-							scene.debugLayer.show()
-						})
-					})
-				})
-		</script> -->
 		<script src="environment.js"></script>
 		<script src="objectInteraction.js"></script>
 		<!-- <script src="exportenv.js"></script> -->

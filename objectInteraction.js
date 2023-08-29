@@ -15,12 +15,12 @@ var showUI = true;
 BabylonViewer.viewerManager
 	.getViewerPromiseById("qcModel")
 	.then(function (viewer) {
-		viewer.onSceneInitObservable.add(function (scene) {
+		viewer.onSceneInitObservable.addOnce(function (scene) {
 			scene.executeWhenReady(function (scene) {
 				// when the scene is ready add GUI
 				createObjInteractions(scene);
 			})
-		})
+        });
 	});
 
 // get the text by ID in the current viewer language
@@ -67,14 +67,19 @@ const strToVec = function(strVec){
 }
 
 const createObjInteractions = function(scene){
-    // get camera
-    let camera = scene.activeCamera;
-
-    // load config files   
+    // load config files
     let textfields = JSON.parse(requestFile('assets/configs/textfields.json').responseText);
     let nametagPositions = JSON.parse(requestFile('assets/configs/nametagsPositions.json').responseText);
     de_DE = requestFile('assets/lang/de_DE.xml').responseXML;
     en_US = requestFile('assets/lang/en_US.xml').responseXML;
+
+    // get camera
+    let camera = scene.activeCamera;
+    //set camera to default position
+    if (nametagPositions.hasOwnProperty('camera_default') && nametagPositions.hasOwnProperty('cameraTarget_default')) {
+        camera.position = strToVec(nametagPositions['camera_default']);
+        camera.target = strToVec(nametagPositions['cameraTarget_default']);
+    }
 
     // create highlight layer/ outlines
     let hl = new BABYLON.HighlightLayer("hl1", scene);
@@ -597,10 +602,4 @@ const createObjInteractions = function(scene){
     window.addEventListener("resize", function () {
         engine.resize();
     });
-
-    //set camera to default position
-    if (nametagPositions.hasOwnProperty('camera_default') && nametagPositions.hasOwnProperty('cameraTarget_default')) {
-        cameraShot('default');
-    }
-    // scene.debugLayer.show();
 }

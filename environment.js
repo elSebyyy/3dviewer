@@ -13,18 +13,17 @@ function addEnvTex(scene){
 	// delete default light
 	scene.lights[0].dispose();
 	
-	// set HDR texture
-	const reflectionTexture = new BABYLON.HDRCubeTexture("assets/environment/raum2_v4.hdr", scene, 512, false, true, false, true);
-	//const reflectionTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("assets/environment/raum2_v5.env", scene);
-	
-	const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("assets/environment/environment.env", scene);
-	scene.environmentTexture = hdrTexture;
-	
-	// create skybox (abkürzen mit DefaultSkybox ?, 4. Parameter)
+	const hdrTexture_sky = BABYLON.CubeTexture.CreateFromPrefilteredData('assets/environment/room2_skybox.dds', scene);
+	const hdrTexture_spec = BABYLON.CubeTexture.CreateFromPrefilteredData('assets/environment/room2_specular.env', scene);
+	scene.environmentTexture = hdrTexture_spec;
+	//set IBL intensity
+	scene.environmentIntensity = 1.2;
+
 	const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:150}, scene);
+        
+	// create skybox (abkürzen mit DefaultSkybox ?, 4. Parameter)
 	const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-	skyboxMaterial.reflectionTexture = reflectionTexture;
-	//skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/environment/environmentSpecular.env", scene);
+	skyboxMaterial.reflectionTexture = hdrTexture_sky;
 	skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 	skyboxMaterial.backFaceCulling = false;
 	skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
@@ -32,9 +31,6 @@ function addEnvTex(scene){
 	skyboxMaterial.microSurface = 0.99;
 	skyboxMaterial.disableLighting = true;
 	skybox.material = skyboxMaterial;
-	
-	// set IBL intensity
-	scene.environmentIntensity = 0.6;
 
 	// set camera preferences
 	let camera = scene.activeCamera;
