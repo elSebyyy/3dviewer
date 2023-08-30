@@ -25,6 +25,7 @@ BabylonViewer.viewerManager
 
 // get the text by ID in the current viewer language
 const getTransText = function(id){
+    console.log(id)
     if(viewerLanguage == 'de_DE'){
         return de_DE.getElementById(id).innerHTML;
     }
@@ -302,17 +303,21 @@ const createObjInteractions = function(scene){
             
             if(modeName == 'plates'){
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
-                    if(! showUI){
+                    if(! showUI || currentSelection == 'hull'){
+                        scene.hoverCursor = "auto";
                         return;
-                    }    
+                    }
+                    scene.hoverCursor = "pointer";
                     scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
                 }));
             }
             else{
                 objMesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function () {
-                    if(! showUI){
+                    if(! showUI || currentSelection == 'hull'){
+                        scene.hoverCursor = "auto";
                         return;
                     }
+                    scene.hoverCursor = "pointer";
                     scene.getMeshesByTags(modeName, (mesh) => mesh.renderOverlay = true);
                     scene.getMeshesByTags(modeName, (mesh) => mesh.overlayAlpha = overlaySecondary);
                     buttonNametag.isVisible = true; //show nametag
@@ -343,7 +348,7 @@ const createObjInteractions = function(scene){
 
 
             const clickObjectAction = function(){
-                if(! showUI){
+                if(! showUI || currentSelection == 'hull'){
                     return;
                 }
                 if(modeName == 'plates'){
@@ -382,6 +387,9 @@ const createObjInteractions = function(scene){
                 if(! ['default', 'hull'].includes(currentSelection)){
                     nametags[currentSelection].forEach(i => i.isVisible = false); // hide all nametags
                 }
+                else if (currentSelection == "hull"){
+                    scene.getMeshByName('hull').setEnabled(false);
+                }
                 scene.getMeshesByTags(currentSelection, (mesh) => hl.removeMesh(mesh)); // hide all highlights
             }
             else{
@@ -405,6 +413,10 @@ const createObjInteractions = function(scene){
         if(! ['default', 'hull'].includes(modeName)){
             nametags[modeName].forEach(i => i.isVisible = true); // show all nametags
         }
+        if(modeName == 'hull'){
+            scene.getMeshByName('hull').setEnabled(true);
+        }
+
         scene.getMeshesByTags(modeName, (mesh) => hl.addMesh(mesh, new BABYLON.Color3.FromHexString(colModes[modeName]))); // highlight all
         cameraShot(modeName);
         currentSelection = modeName;
@@ -555,7 +567,7 @@ const createObjInteractions = function(scene){
     });
 
     let nametagsVis = [];
-    const buttonsDisable = [buttonForward, buttonBackward, buttonFullscreen, buttonChangeLang];
+    let buttonsDisable = [buttonForward, buttonBackward, buttonFullscreen, buttonChangeLang];
     buttonHideUI.onPointerClickObservable.add(function(){
         if(showUI){
             nametagsVis = advancedTexture.getDescendants().filter(con => con.name.startsWith("buttonNametag_") && con.isVisible == true);
@@ -564,7 +576,12 @@ const createObjInteractions = function(scene){
             buttonsDisable.forEach(function(button){
                 button.isEnabled = false;
                 button.isVisible = false;
-            })
+            });
+            Object.values(modeButtons).forEach(function(button){
+                button.style.display = 'none';
+                button.disabled = true;
+            });
+
             infoBox.style.display = 'none';
             showUI = false;
         }
@@ -575,6 +592,10 @@ const createObjInteractions = function(scene){
             buttonsDisable.forEach(function(button){
                 button.isEnabled = true;
                 button.isVisible = true;
+            });
+            Object.values(modeButtons).forEach(function(button){
+                button.style.display = 'initial';
+                button.disabled = false;
             });
             infoBox.style.display = 'initial';
             showUI = true;

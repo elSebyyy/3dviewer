@@ -63,6 +63,14 @@ function addEnvTex(scene){
 		}
 		//item.showBoundingBox = true;
 	});
+
+	BABYLON.SceneLoader.AppendAsync("assets/hull/", "hull.gltf", scene).then(function (scene) {
+		const hull = scene.getMeshByName('hull');
+		hull.checkCollisions = true;
+		hull.isPickable = false;
+		hull.setEnabled(false);
+	  });
+
 	setTimeout( function() { camera.upperRadiusLimit=10 }, 2000);
 	// apply lightmap to material(s) (todo: lightmap intensity)
 	// const lightmapMounting = new BABYLON.Texture("assets/textures/lightmap.png", scene);

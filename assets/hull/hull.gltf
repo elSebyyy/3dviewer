@@ -1,0 +1,176 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.2.43",
+        "version" : "2.0"
+    },
+    "extensionsUsed" : [
+        "KHR_draco_mesh_compression"
+    ],
+    "extensionsRequired" : [
+        "KHR_draco_mesh_compression"
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "hull",
+            "rotation" : [
+                0,
+                -1,
+                0,
+                4.371138828673793e-08
+            ],
+            "translation" : [
+                0,
+                4.264411449432373,
+                0
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "hull",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 1
+                },
+                "roughnessFactor" : 0.60,
+                "metallicRoughnessTexture" : {
+                    "index" : 2
+                }
+            },
+            "occlusionTexture" : {
+                "index" : 2,
+                "strength" : 0.77
+            },
+            "normalTexture" : {
+                "index" : 0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "hull",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TANGENT" : 2,
+                        "TEXCOORD_0" : 3
+                    },
+                    "extensions" : {
+                        "KHR_draco_mesh_compression" : {
+                            "bufferView" : 0,
+                            "attributes" : {
+                                "POSITION" : 0,
+                                "NORMAL" : 1,
+                                "TANGENT" : 2,
+                                "TEXCOORD_0" : 3
+                            }
+                        }
+                    },
+                    "indices" : 4,
+                    "material" : 0,
+                    "mode" : 4
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "hull_low_hull_Normal",
+            "uri" : "textures/hull_N.jpg"
+        },
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "hull_low_hull_BaseColor",
+            "uri" : "textures/hull_BC.jpg"
+        },
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "hull_low_hull_OcclusionRoughnessMetallic",
+            "uri" : "textures/hull_ORM.jpg"
+        }
+    ],
+    "accessors" : [
+        {
+            "componentType" : 5126,
+            "count" : 8969,
+            "max" : [
+                1.5830516815185547,
+                1.6384048461914062,
+                1.5830509662628174
+            ],
+            "min" : [
+                -1.5864086151123047,
+                -4.264411449432373,
+                -1.583052396774292
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "componentType" : 5126,
+            "count" : 8969,
+            "type" : "VEC3"
+        },
+        {
+            "componentType" : 5126,
+            "count" : 8969,
+            "type" : "VEC4"
+        },
+        {
+            "componentType" : 5126,
+            "count" : 8969,
+            "type" : "VEC2"
+        },
+        {
+            "componentType" : 5123,
+            "count" : 38304,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 87726,
+            "byteOffset" : 0
+        }
+    ],
+    "samplers" : [
+        {
+            "magFilter" : 9729,
+            "minFilter" : 9987
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 87728,
+            "uri" : "hull.bin"
+        }
+    ]
+}
