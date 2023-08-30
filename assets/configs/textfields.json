@@ -43,7 +43,6 @@
 			"cables_control": {
 				"name": "cables_control_name",
 				"text": "cables_control_text",
-				"textDetails": "cables_control_textDetails",
 				"seq": 4
 			},
 			"cables_measuring": {

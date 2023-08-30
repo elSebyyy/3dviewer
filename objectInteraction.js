@@ -25,7 +25,6 @@ BabylonViewer.viewerManager
 
 // get the text by ID in the current viewer language
 const getTransText = function(id){
-    console.log(id)
     if(viewerLanguage == 'de_DE'){
         return de_DE.getElementById(id).innerHTML;
     }
@@ -435,7 +434,8 @@ const createObjInteractions = function(scene){
         // get next object or mode
         do{
             seqTag += direction;
-            if(seqTag < 0 || seqTag > 20){
+            // TODO: remove hard coded value
+            if(seqTag < 0 || seqTag > 21){
                 return;
             }
             let objNext = scene.getMeshesByTags((seqTag).toString())
